@@ -9,6 +9,7 @@ config = {
     "REDIS_DB": int(os.environ.get("REDIS_DB", 0)),
 }
 
+
 class Redis(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -22,6 +23,6 @@ class Redis(commands.Cog):
     async def on_ready(self):
         print(f"Loaded {__name__}")
 
+
 def setup(bot):
     bot.add_cog(Redis(bot))
-
