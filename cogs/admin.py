@@ -16,9 +16,11 @@ class Admin(commands.Cog):
         message = await ctx.send("Reloading!")
         await ctx.message.delete()
         try:
-            for cog in os.listdir("./cogs"):
+            cogs = os.listdir("./cogs")
+            for cog in cogs:
                 if cog.endswith(".py"):
                     self.bot.reload_extension(f"cogs.{cog[:-3]}")
+
         except Exception as e:
             await message.edit(content=f"Error: {e}", delete_after=10)
         else:

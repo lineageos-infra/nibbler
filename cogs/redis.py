@@ -23,6 +23,20 @@ class Redis(commands.Cog):
     async def on_ready(self):
         print(f"Loaded {__name__}")
 
+    @commands.command(help="(owner only) interact with bot config redis store")
+    @commands.is_owner()
+    async def config(self, ctx, command, *args):
+        text = getattr(self.redis, command)(*args)
+
+        if type(text) in [list, set]:
+            text = [x.decode("utf-8") for x in text]
+        elif type(text) in [dict]:
+            text = {x.decode("utf-8"): y.decode("utf-8") for x, y in text.items()}
+        elif type(text) is bytes:
+            text = text.decode("utf-8")
+
+        await ctx.send(f"```{text}```")
+
 
 def setup(bot):
     bot.add_cog(Redis(bot))
