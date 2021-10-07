@@ -15,7 +15,7 @@ class Reddit(commands.Cog):
     async def on_ready(self):
         print(f"Loaded {__name__}")
 
-    @tasks.loop(seconds=15)
+    @tasks.loop(seconds=30)
     async def fetch_posts(self):
         if len(self.bot.guilds) == 0:
             return
