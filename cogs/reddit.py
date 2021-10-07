@@ -34,7 +34,7 @@ class Reddit(commands.Cog):
             embed = discord.Embed.from_dict({
                 "title": f"{post.title} * /r/LineageOS",
                 "type": "rich",
-                "description": post.selftext[:140]
+                "description": post.selftext[:4000]
                 if hasattr(post, "selftext")
                 else "" + "..."
                 if len(post.selftext) > 140
