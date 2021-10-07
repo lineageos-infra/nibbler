@@ -17,8 +17,6 @@ class Reddit(commands.Cog):
 
     @tasks.loop(seconds=15)
     async def fetch_posts(self):
-        print("running reddit task")
-
         if len(self.bot.guilds) == 0:
             return
         if not hasattr(self, "channel"):
