@@ -60,7 +60,7 @@ class Reddit(commands.Cog):
     @reddit.command()
     @commands.is_owner()
     async def flush(self, ctx):
-        ctx.message.delete()
+        await ctx.message.delete()
         self.redis.delete("reddit-fetch:done")
 
 def setup(bot):
