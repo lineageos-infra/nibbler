@@ -74,6 +74,11 @@ class Roles(commands.Cog):
         await ctx.send(message, delete_after=20)
     
     async def do_update(self):
+        if len(self.bot.guilds) == 0:
+            return
+        if not hasattr(self, 'channel'):
+            self.channel = discord.utils.get(self.bot.guilds[0].channels, name="roles")
+
         message = await self.channel.history(limit=1).flatten()
         if message:
             cmd = message[0].edit

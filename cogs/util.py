@@ -10,7 +10,7 @@ class Util(commands.Cog):
     async def on_ready(self):
         print(f"Loaded {__name__}")
 
-    async def get_superuser_roles():
+    async def get_superuser_roles(self):
         return [x.decode("utf-8") for x in self.redis.smembers("superuser_roles")]
 
 
