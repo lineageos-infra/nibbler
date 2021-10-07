@@ -25,12 +25,15 @@ class Roles(commands.Cog):
             return
         # get role
         emoji = payload.emoji.name
-        role = discord.utils.get(payload.member.guild.roles, name=self.redis.hget("roles", emoji).decode('utf-8'))
-        if role:
-            if role in payload.member.roles:
-                await payload.member.remove_roles(role, reason="clicked emoji")
-            else:
-                await payload.member.add_roles(role, reason="clicked emoji")
+        try:
+            role = discord.utils.get(payload.member.guild.roles, name=self.redis.hget("roles", emoji).decode('utf-8'))
+            if role:
+                if role in payload.member.roles:
+                    await payload.member.remove_roles(role, reason="clicked emoji")
+                else:
+                    await payload.member.add_roles(role, reason="clicked emoji")
+        except:
+            pass
         message = await self.channel.fetch_message(payload.message_id)
         await message.remove_reaction(emoji, payload.member)
 
