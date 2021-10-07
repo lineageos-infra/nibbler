@@ -20,12 +20,13 @@ class Gerrit(commands.Cog):
         regex = ".*https://review\.lineageos\.org/(?:(?:#\/)?c\/(?:LineageOS\/[a-zA-Z_0-9\-]*\/\+\/)?)?(\d+).*"
         if match := re.match(regex, message.content):
             req = requests.get(
-                f"https://review.lineageos.org/changes/{match[1]}?o=DETAILED_ACCOUNTS"
+                f"https://review.lineageos.org/changes/{match[1]}?o=DETAILED_ACCOUNTS&o=DETAILED_ACCOUNTS&o=CURRENT_REVISION&o=CURRENT_COMMIT"
             )
             change = json.loads(req.text[4:])
             embed = discord.Embed(
                 content=f"{self.gerrit_url}/c/{change['_number']}: {change['subject']}",
                 title=f"{change['_number']}: {change['subject']} ({change['status']})",
+                description=change["revisions"][change["current_revision"]]["commit"]["message"].split("\n", 1)[-1].strip(),
                 type="rich",
                 url=f"https://review.lineageos.org/c/{change['_number']}",
                 colour=discord.Colour.green(),
