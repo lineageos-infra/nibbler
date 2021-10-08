@@ -135,7 +135,6 @@ class Roles(commands.Cog):
             if '#' in arg:
                 query = arg.split("#")
                 u = discord.utils.get(ctx.guild.members, name=query[0], discriminator=query[1])
-                import pdb; pdb.set_trace()
                 if u:
                     users.append(u)
         for user in users:
