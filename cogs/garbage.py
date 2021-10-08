@@ -24,7 +24,7 @@ class Garbage(commands.Cog):
         await ctx.send(req.text)
     
     @commands.command(hidden=True)
-    async def catfact(self, ctx):
+    async def vend(self, ctx):
         req = requests.get("https://itvends.com/vend.php?format=text")
         await ctx.send(f"_vends {req.text}_")
 
