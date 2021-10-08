@@ -28,6 +28,10 @@ class Garbage(commands.Cog):
         req = requests.get("https://itvends.com/vend.php?format=text")
         await ctx.send(f"_vends {req.text}_")
 
+    @commands.command(hidden=True)
+    async def why(self, ctx):
+        await ctx.send("Because, that's why.")
+
 
 def setup(bot):
     bot.add_cog(Garbage(bot))
