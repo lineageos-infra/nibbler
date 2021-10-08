@@ -136,10 +136,11 @@ class Roles(commands.Cog):
                 u = discord.utils.get(ctx.guild.members, name=query[0], discriminator=query[1])
                 if u:
                     users.append(u)
-        for user in users:
-            if not role in user.roles:
-                await user.add_roles(role)
-                await ctx.message.add_reaction("✅")
+        if users:
+            await ctx.message.add_reaction("✅")
+            for user in users:
+                if not role in user.roles:
+                    await user.add_roles(role)
 
     @commands.command(help="Create a channel under 'hardware' for a device/oem")
     @commands.has_role("Project Director")
