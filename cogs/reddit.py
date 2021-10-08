@@ -27,7 +27,7 @@ class Reddit(commands.Cog):
             self._r = asyncpraw.Reddit(user_agent="LineageOS Discord Bot v1.0")
             self._r.read_only = True
             self.subreddit = await self._r.subreddit("lineageos")
-        
+
         async for post in self.subreddit.new(limit=10):
             if post.id in self.done:
                 continue

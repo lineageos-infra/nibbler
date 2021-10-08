@@ -74,9 +74,9 @@ class Roles(commands.Cog):
             i = info.get(k)
             message += f"{k.decode('utf-8')}: {v.decode('utf-8')} (info: {i}, category: {c})\n"
 
-    
+
         await ctx.send(message, delete_after=20)
-    
+
     async def do_update(self):
         if len(self.bot.guilds) == 0:
             return
@@ -95,7 +95,7 @@ class Roles(commands.Cog):
         categories = self.redis.hgetall("rolecategories")
 
         content = "Some channels require roles - react below:\n"
-        
+
         data = {}
 
         for role in roles.keys():
@@ -124,7 +124,7 @@ class Roles(commands.Cog):
     @tasks.loop(minutes=15)
     async def update_task(self):
         await self.do_update()
-    
+
     @commands.command(help="Add maintainers via either a mention (@user) or a string (user#0000)")
     @commands.has_role("Project Director")
     async def maintainer(self, ctx, *args):

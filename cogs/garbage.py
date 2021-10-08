@@ -17,12 +17,12 @@ class Garbage(commands.Cog):
     @commands.command(hidden=True)
     async def devices(self, ctx):
         await ctx.send("Supported devices list: https://wiki.lineageos.org/devices/. Requests for additions can be made at https://undocumented.software/device_request/")
-    
+
     @commands.command(hidden=True)
     async def catfact(self, ctx):
         req = requests.get("https://itvends.com/catfacts.php?format=text")
         await ctx.send(req.text)
-    
+
     @commands.command(hidden=True)
     async def vend(self, ctx):
         req = requests.get("https://itvends.com/vend.php?format=text")
