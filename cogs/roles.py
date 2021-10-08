@@ -124,7 +124,7 @@ class Roles(commands.Cog):
         await self.do_update()
     
     # adds someone to maintainer role
-    @commands.command()
+    @commands.command(help="Add maintainers via either a mention (@user) or a string (user#0000)")
     @commands.has_role("Project Director")
     async def maintainer(self, ctx, *args):
         print("test")
