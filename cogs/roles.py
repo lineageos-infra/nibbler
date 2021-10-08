@@ -94,7 +94,7 @@ class Roles(commands.Cog):
         info = self.redis.hgetall("roleinfo")
         categories = self.redis.hgetall("rolecategories")
 
-        content = "Some channels requires roles - react below:\n"
+        content = "Some channels require roles - react below:\n"
         
         data = {}
 
