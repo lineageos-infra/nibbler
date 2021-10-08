@@ -4,7 +4,9 @@ import discord
 
 
 class Roles(commands.Cog):
-    '''Roles provides two funtions - role reactions and a few random commands
+    '''Roles provides multiple funtions - this is where most of the permission related stuff for lineage lives.
+    - makes #roles operate, see !help reactionrole
+    - quickly add people to the maintainer role via !maintainer (mention or user#1234)
     '''
     def __init__(self, bot):
         self.bot = bot
@@ -39,12 +41,12 @@ class Roles(commands.Cog):
         message = await self.channel.fetch_message(payload.message_id)
         await message.remove_reaction(emoji, payload.member)
 
-    @commands.group()
+    @commands.group(help="reaction-role config")
     @commands.is_owner()
-    async def roles(self, ctx):
+    async def reactionrole(self, ctx):
         pass
 
-    @roles.command()
+    @reactionrole.command(help="add a role for reaction-joining")
     async def add(self, ctx, category, role, emoji, info):
         await ctx.message.delete()
         if not role in [x.name for x in ctx.guild.roles]:
@@ -53,14 +55,14 @@ class Roles(commands.Cog):
         self.redis.hset("roleinfo", emoji, info)
         self.redis.hset("rolecategories", emoji, category)
 
-    @roles.command(name="del")
+    @reactionrole.command(name="del", help="delete a role by name")
     async def _del(self, ctx, emoji):
         await ctx.message.delete()
         self.redis.hdel("roles", emoji)
         self.redis.hdel("roleinfo", emoji)
         self.redis.hdel("rolecategories", emoji)
 
-    @roles.command()
+    @reactionrole.command(help="list all the roles available for reactions")
     async def get(self, ctx):
         await ctx.message.delete()
         roles = self.redis.hgetall("roles")
@@ -114,7 +116,7 @@ class Roles(commands.Cog):
         for k, v in roles.items():
             await message[0].add_reaction(k.decode('utf-8'))
 
-    @roles.command()
+    @reactionrole.command(help="trigger an update of the reaction-role message in #roles")
     async def update(self, ctx):
         await ctx.message.delete()
         await self.do_update()
@@ -123,15 +125,12 @@ class Roles(commands.Cog):
     async def update_task(self):
         await self.do_update()
     
-    # adds someone to maintainer role
     @commands.command(help="Add maintainers via either a mention (@user) or a string (user#0000)")
     @commands.has_role("Project Director")
     async def maintainer(self, ctx, *args):
-        print("test")
         role = discord.utils.get(ctx.guild.roles, name="Maintainer")
         users = ctx.message.mentions
         for arg in args:
-            print(arg)
             if '#' in arg:
                 query = arg.split("#")
                 u = discord.utils.get(ctx.guild.members, name=query[0], discriminator=query[1])
@@ -142,5 +141,6 @@ class Roles(commands.Cog):
                 await user.add_roles(role)
                 await ctx.message.add_reaction("✔️")
     
+
 def setup(bot):
     bot.add_cog(Roles(bot))
