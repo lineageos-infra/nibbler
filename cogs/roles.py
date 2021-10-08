@@ -139,7 +139,7 @@ class Roles(commands.Cog):
         for user in users:
             if not role in user.roles:
                 await user.add_roles(role)
-                await ctx.message.add_reaction("✔️")
+                await ctx.message.add_reaction("✅")
 
     @commands.command(help="Create a channel under 'hardware' for a device/oem")
     @commands.has_role("Project Director")
