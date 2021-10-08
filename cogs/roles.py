@@ -4,6 +4,8 @@ import discord
 
 
 class Roles(commands.Cog):
+    '''Roles provides two funtions - role reactions and a few random commands
+    '''
     def __init__(self, bot):
         self.bot = bot
         self.update_task.start()
@@ -120,6 +122,16 @@ class Roles(commands.Cog):
     @tasks.loop(minutes=15)
     async def update_task(self):
         await self.do_update()
+    
+    # adds someone to maintainer role
+    @commands.command()
+    @commands.has_role("Project Director")
+    async def maintainer(self, ctx, user):
+        role = discord.utils.get(ctx.guild.roles, name="Maintainer")
+        for user in ctx.message.mentions:
+            if not role in user.roles:
+                await user.add_roles(role)
+                await ctx.message.add_reaction("✔️")
     
 def setup(bot):
     bot.add_cog(Roles(bot))
