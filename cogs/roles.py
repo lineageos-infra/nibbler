@@ -126,9 +126,19 @@ class Roles(commands.Cog):
     # adds someone to maintainer role
     @commands.command()
     @commands.has_role("Project Director")
-    async def maintainer(self, ctx, user):
+    async def maintainer(self, ctx, *args):
+        print("test")
         role = discord.utils.get(ctx.guild.roles, name="Maintainer")
-        for user in ctx.message.mentions:
+        users = ctx.message.mentions
+        for arg in args:
+            print(arg)
+            if '#' in arg:
+                query = arg.split("#")
+                u = discord.utils.get(ctx.guild.members, name=query[0], discriminator=query[1])
+                import pdb; pdb.set_trace()
+                if u:
+                    users.append(u)
+        for user in users:
             if not role in user.roles:
                 await user.add_roles(role)
                 await ctx.message.add_reaction("✔️")
