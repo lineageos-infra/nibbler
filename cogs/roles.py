@@ -140,7 +140,32 @@ class Roles(commands.Cog):
             if not role in user.roles:
                 await user.add_roles(role)
                 await ctx.message.add_reaction("✔️")
-    
+
+    @commands.command(help="Create a channel under 'hardware' for a device/oem")
+    @commands.has_role("Project Director")
+    async def devicechannel(self, ctx, device):
+        device_role = discord.utils.get(ctx.guild.roles, name=device)
+
+        category = discord.utils.get(ctx.guild.categories, name='hardware')
+        channel = discord.utils.get(ctx.guild.channels, name=device)
+
+        if not device_role:
+            device_role = await ctx.guild.create_role(name=device)
+
+        overwrites = {
+            ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+            ctx.guild.me: discord.PermissionOverwrite(read_messages=True),
+            device_role: discord.PermissionOverwrite(read_messages=True)
+        }
+        if not category:
+            category = await ctx.guild.create_category_channel(name='hardware', overwrites=overwrites)
+        else:
+            await category.set_permissions(device_role, read_messages=True)
+
+        if not channel or channel.category != category:
+            channel = await ctx.guild.create_text_channel(name=device, category=category, overwrites=overwrites)
+
+        await ctx.message.add_reaction("👍")
 
 def setup(bot):
     bot.add_cog(Roles(bot))
