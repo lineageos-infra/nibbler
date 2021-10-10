@@ -32,6 +32,10 @@ class Garbage(commands.Cog):
     async def why(self, ctx):
         await ctx.send("Because, that's why.")
 
+    @commands.command(hidden=True)
+    async def yw(self, ctx):
+        await ctx.send("You're welcome")
+
 
 def setup(bot):
     bot.add_cog(Garbage(bot))
