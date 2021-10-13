@@ -13,6 +13,7 @@ class Todo(commands.Cog):
 
 
     @commands.command(help="Manage Todo Lists. Action can be one of 'list', 'add', or 'done'. Note: all list items must be quoted.")
+    @commands.has_role("Maintainer")
     async def todo(self, ctx, _list, action, item=None):
         await ctx.message.delete(delay=30)
         if action == "list":
