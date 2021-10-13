@@ -1,0 +1,46 @@
+from discord.ext import tasks, commands
+
+import discord
+import asyncpraw
+
+class Todo(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f"Loaded {__name__}")
+
+
+    @commands.command(help="Manage Todo Lists. Action can be one of 'list', 'add', or 'done'. Note: all list items must be quoted.")
+    async def todo(self, ctx, _list, action, item=None):
+        await ctx.message.delete(delay=30)
+        if action == "list":
+            items = self.redis.hgetall(f"todo:{_list}")
+            reply = ""
+            for k, v in items.items():
+                if v.decode('utf-8') == "done":
+                    if item == "all":
+                        reply += f"{v.decode('utf-8')}: {k.decode('utf-8')}"
+                else:
+                    reply += f"{v.decode('utf-8')}: {k.decode('utf-8')}"
+            if not reply:
+                reply = "This list is empty"
+            await ctx.reply(f"```{reply}```", mention_author=False, delete_after=60)
+        elif action == "add":
+            if not item:
+                ctx.reply("I can't add nothing", delete_after=30)
+            self.redis.hset(f"todo:{_list}", item, ctx.message.author.name)
+            await ctx.message.add_reaction("👍")
+        elif action == "done":
+            if not item:
+                await ctx.message.add_reaction("👎")
+                await ctx.message.reply("I can't complete nothing", delete_after=30)
+            if not self.redis.hget(f"todo:{_list}", item):
+                await ctx.message.add_reaction("👎")
+                await ctx.message.reply("Item not found", delete_after=30)
+            self.redis.hset(f"todo:{_list}", item, "done")
+            await ctx.message.add_reaction("👍")
+
+def setup(bot):
+    bot.add_cog(Todo(bot))
