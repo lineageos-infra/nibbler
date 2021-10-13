@@ -36,6 +36,14 @@ class Garbage(commands.Cog):
     async def yw(self, ctx):
         await ctx.send("You're welcome")
 
+    @commands.command(hidden=True)
+    async def how(send, ctx):
+        await ctx.send("Stop asking questions you'll go blind.")
+
+    @commands.command(hidden=True)
+    async def what(send, ctx):
+        await ctx.send("https://tenor.com/view/goat-scary-animal-crazy-animal-scary-goat-wtf-gif-5548755")
+
 
 def setup(bot):
     bot.add_cog(Garbage(bot))
