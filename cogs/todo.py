@@ -22,9 +22,9 @@ class Todo(commands.Cog):
             for k, v in items.items():
                 if v.decode('utf-8') == "done":
                     if item == "all":
-                        reply += f"{v.decode('utf-8')}: {k.decode('utf-8')}"
+                        reply += f"{v.decode('utf-8')}: {k.decode('utf-8')}\n"
                 else:
-                    reply += f"{v.decode('utf-8')}: {k.decode('utf-8')}"
+                    reply += f"{v.decode('utf-8')}: {k.decode('utf-8')}\n"
             if not reply:
                 reply = "This list is empty"
             await ctx.reply(f"```{reply}```", mention_author=False, delete_after=60)
