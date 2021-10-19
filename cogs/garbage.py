@@ -29,6 +29,10 @@ class Garbage(commands.Cog):
         await ctx.send(f"_vends {req.text}_")
 
     @commands.command(hidden=True)
+    async def ask(self, ctx):
+        await ctx.send("Yes - you can ask questions here - you just did! Please get to the point, we don't have all day.")
+
+    @commands.command(hidden=True)
     async def why(self, ctx):
         await ctx.send("Because, that's why.")
 
