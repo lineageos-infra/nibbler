@@ -54,6 +54,7 @@ class Reddit(commands.Cog):
             self.done.append(post.id)
 
     @commands.group()
+    @commands.is_owner()
     async def reddit(self, ctx):
         pass
 
