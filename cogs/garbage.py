@@ -52,6 +52,9 @@ class Garbage(commands.Cog):
     async def what(send, ctx):
         await ctx.send("https://tenor.com/view/goat-scary-animal-crazy-animal-scary-goat-wtf-gif-5548755")
 
+    @commands.command(hidden=True)
+    async def shipit(send, ctx):
+        await ctx.send("https://memegenerator.net/img/instances/54219302/lgtm-ship-it.jpg")
 
 def setup(bot):
     bot.add_cog(Garbage(bot))
