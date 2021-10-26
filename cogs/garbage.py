@@ -60,5 +60,9 @@ class Garbage(commands.Cog):
     async def watcannon(send, ctx):
         await ctx.send("https://64.media.tumblr.com/d655daf4856de7e1a45d4a180ad3d5ea/tumblr_muv69e0RvZ1shlw0so1_500.gif")
 
+    @commands.command(hidden=True)
+    async def muricana(send, ctx):
+        await ctx.send("https://tenor.com/view/american-eagle-usa-usa-flag-gif-14222446")
+
 def setup(bot):
     bot.add_cog(Garbage(bot))
