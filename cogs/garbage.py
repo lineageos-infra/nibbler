@@ -33,6 +33,10 @@ class Garbage(commands.Cog):
         await ctx.send("Yes - you can ask questions here - you just did! Please get to the point, we don't have all day.")
 
     @commands.command(hidden=True)
+    async def eta(self, ctx):
+        await ctx.send("Please don't ask for ETAs. We don't provide them.")
+
+    @commands.command(hidden=True)
     async def why(self, ctx):
         await ctx.send("Because, that's why.")
 
