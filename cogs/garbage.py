@@ -3,6 +3,20 @@ import requests
 
 
 class Garbage(commands.Cog):
+    MACROS = {
+        "ask": "Yes - you can ask questions here - you just did! Please get to the point, we don't have all day.",
+        "devices": "Supported devices list: https://wiki.lineageos.org/devices/. Requests for additions can be made at https://undocumented.software/device_request/",
+        "eta": "Please don't ask for ETAs. We don't provide them.",
+        "how": "Stop asking questions you'll go blind.",
+        "muricana": "https://tenor.com/view/american-eagle-usa-usa-flag-gif-14222446",
+        "next": "Another satisfied customer. NEXT!",
+        "shipit": "https://memegenerator.net/img/instances/54219302/lgtm-ship-it.jpg",
+        "watcannon": "https://64.media.tumblr.com/d655daf4856de7e1a45d4a180ad3d5ea/tumblr_muv69e0RvZ1shlw0so1_500.gif",
+        "what": "https://tenor.com/view/goat-scary-animal-crazy-animal-scary-goat-wtf-gif-5548755",
+        "why": "Because, that's why.",
+        "yw": "You're welcome",
+    }
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -10,13 +24,9 @@ class Garbage(commands.Cog):
     async def on_ready(self):
         print(f"Loaded {__name__}")
 
-    @commands.command(name='next', hidden=True)
-    async def _next(self, ctx):
-        await ctx.send("Another satisfied customer. NEXT!")
-
-    @commands.command(hidden=True)
-    async def devices(self, ctx):
-        await ctx.send("Supported devices list: https://wiki.lineageos.org/devices/. Requests for additions can be made at https://undocumented.software/device_request/")
+    @commands.command(hidden=True, name=list(MACROS.keys())[0], aliases=list(MACROS.keys())[1:])
+    async def _macro(self, ctx):
+        await ctx.send(self.MACROS[ctx.invoked_with])
 
     @commands.command(hidden=True)
     async def catfact(self, ctx):
@@ -28,41 +38,6 @@ class Garbage(commands.Cog):
         req = requests.get("https://itvends.com/vend.php?format=text")
         await ctx.send(f"_vends {req.text}_")
 
-    @commands.command(hidden=True)
-    async def ask(self, ctx):
-        await ctx.send("Yes - you can ask questions here - you just did! Please get to the point, we don't have all day.")
-
-    @commands.command(hidden=True)
-    async def eta(self, ctx):
-        await ctx.send("Please don't ask for ETAs. We don't provide them.")
-
-    @commands.command(hidden=True)
-    async def why(self, ctx):
-        await ctx.send("Because, that's why.")
-
-    @commands.command(hidden=True)
-    async def yw(self, ctx):
-        await ctx.send("You're welcome")
-
-    @commands.command(hidden=True)
-    async def how(send, ctx):
-        await ctx.send("Stop asking questions you'll go blind.")
-
-    @commands.command(hidden=True)
-    async def what(send, ctx):
-        await ctx.send("https://tenor.com/view/goat-scary-animal-crazy-animal-scary-goat-wtf-gif-5548755")
-
-    @commands.command(hidden=True)
-    async def shipit(send, ctx):
-        await ctx.send("https://memegenerator.net/img/instances/54219302/lgtm-ship-it.jpg")
-
-    @commands.command(hidden=True)
-    async def watcannon(send, ctx):
-        await ctx.send("https://64.media.tumblr.com/d655daf4856de7e1a45d4a180ad3d5ea/tumblr_muv69e0RvZ1shlw0so1_500.gif")
-
-    @commands.command(hidden=True)
-    async def muricana(send, ctx):
-        await ctx.send("https://tenor.com/view/american-eagle-usa-usa-flag-gif-14222446")
 
 def setup(bot):
     bot.add_cog(Garbage(bot))
