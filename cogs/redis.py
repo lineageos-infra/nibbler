@@ -7,6 +7,7 @@ config = {
     "REDIS_HOST": os.environ.get("REDIS_HOST", "localhost"),
     "REDIS_PORT": int(os.environ.get("REDIS_PORT", 6379)),
     "REDIS_DB": int(os.environ.get("REDIS_DB", 0)),
+    "REDIS_PASSWORD": os.environ.get("REDIS_PASSWORD", None),
 }
 
 
@@ -17,6 +18,7 @@ class Redis(commands.Cog):
             host=config["REDIS_HOST"],
             port=config["REDIS_PORT"],
             db=config["REDIS_DB"],
+            password=config["REDIS_PASSWORD"],
         )
 
     @commands.Cog.listener()
