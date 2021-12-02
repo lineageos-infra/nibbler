@@ -1,7 +1,8 @@
-from discord.ext import tasks, commands
+import os
 
 import discord
 import asyncpraw
+from discord.ext import tasks, commands
 
 class Reddit(commands.Cog):
     def __init__(self, bot):
