@@ -28,7 +28,7 @@ class Reddit(commands.Cog):
             self._r = asyncpraw.Reddit(
                 user_agent="LineageOS Discord Bot v1.0",
                 client_id=os.environ.get("REDDIT_CLIENT_ID"),
-                client_secret=os.environ.get("REDDIT_CLIENT>SECRET"),
+                client_secret=os.environ.get("REDDIT_CLIENT_SECRET"),
             )
             self._r.read_only = True
             self.subreddit = await self._r.subreddit("lineageos")
@@ -58,8 +58,8 @@ class Reddit(commands.Cog):
                 await self.channel.send(content=None, embed=embed)
                 self.redis.sadd("reddit-fetch:done", post.id)
                 self.done.append(post.id)
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
     @commands.group()
     @commands.is_owner()
