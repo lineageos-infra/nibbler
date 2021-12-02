@@ -24,7 +24,11 @@ class Reddit(commands.Cog):
         if not hasattr(self, "done"):
             self.done = [x.decode("utf-8") for x in self.redis.smembers("reddit-fetch:done")]
         if not hasattr(self, "_r"):
-            self._r = asyncpraw.Reddit(user_agent="LineageOS Discord Bot v1.0")
+            self._r = asyncpraw.Reddit(
+                user_agent="LineageOS Discord Bot v1.0",
+                client_id=os.environ.get("REDDIT_CLIENT_ID"),
+                client_secret=os.environ.get("REDDIT_CLIENT>SECRET"),
+            )
             self._r.read_only = True
             self.subreddit = await self._r.subreddit("lineageos")
 
