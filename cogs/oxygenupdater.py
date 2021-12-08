@@ -13,13 +13,13 @@ class OxygenUpdater(commands.Cog):
         print(f"Loaded {__name__}")
 
     @commands.command(hidden=True)
-    async def ou(self, ctx, device=None, updateType=2):
+    async def ou(self, ctx, device=None, update_type=2):
         if device == None:
             req = requests.get("https://oxygenupdater.com/api/v2.6/devices").json()
             devices = { x["id"]: x["name"] for x in sorted(req, key=lambda d: int(d["id"])) }
             await ctx.send(f"```{devices}```")
         else:
-            req = requests.get(f"https://oxygenupdater.com/api/v2.6/mostRecentUpdateData/{device}/{updateType}").json()
+            req = requests.get(f"https://oxygenupdater.com/api/v2.6/mostRecentUpdateData/{device}/{update_type}").json()
             embed = discord.Embed.from_dict({
                 "title": req["ota_version_number"],
                 "type": "rich",
