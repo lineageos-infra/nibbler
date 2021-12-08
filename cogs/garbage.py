@@ -9,6 +9,7 @@ class Garbage(commands.Cog):
         "devices": "Supported devices list: https://wiki.lineageos.org/devices/. Requests for additions can be made at https://undocumented.software/device_request/",
         "eta": "Please don't ask for ETAs. We don't provide them.",
         "how": "Stop asking questions you'll go blind.",
+        "logcat": "Logcat: https://i.imgur.com/bSwnH7B.jpg. Follow this: http://wiki.lineageos.org/logcat.html and paste it to https://vomitb.in",
         "muricana": "https://tenor.com/view/american-eagle-usa-usa-flag-gif-14222446",
         "next": "Another satisfied customer. NEXT!",
         "shipit": "https://memegenerator.net/img/instances/54219302/lgtm-ship-it.jpg",
