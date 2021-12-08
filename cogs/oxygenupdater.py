@@ -1,6 +1,7 @@
 from discord.ext import tasks, commands
 
 import discord
+import json
 import requests
 
 
@@ -17,11 +18,11 @@ class OxygenUpdater(commands.Cog):
         if device == None:
             req = requests.get("https://oxygenupdater.com/api/v2.6/devices").json()
             devices = { x["id"]: x["name"] for x in sorted(req, key=lambda d: int(d["id"])) }
-            await ctx.send(f"```\n{devices}\n```")
+            await ctx.send(f"```\n{json.dumps(devices, indent=4)}\n```")
         elif update_method == "?":
             req = requests.get(f"https://oxygenupdater.com/api/v2.6/updateMethods/{device}").json()
             update_methods = { x["id"]: x["english_name"] for x in sorted(req, key=lambda d: int(d["id"])) }
-            await ctx.send(f"```\n{update_methods}\n```")
+            await ctx.send(f"```\n{json.dumps(update_methods, indent=4)}\n```")
         else:
             req = requests.get(f"https://oxygenupdater.com/api/v2.6/mostRecentUpdateData/{device}/{update_method}").json()
             embed = discord.Embed.from_dict({
