@@ -137,6 +137,8 @@ class Roles(commands.Cog):
                 u = discord.utils.get(ctx.guild.members, name=query[0], discriminator=query[1])
                 if u:
                     users.append(u)
+                else:
+                    await ctx.reply(f"User \"{arg}\" doesn't exist in this server")
         if users:
             await ctx.message.add_reaction("✅")
             for user in users:
