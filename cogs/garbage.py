@@ -14,6 +14,7 @@ class Garbage(commands.Cog):
         "muricana": "https://tenor.com/view/american-eagle-usa-usa-flag-gif-14222446",
         "next": "Another satisfied customer. NEXT!",
         "shipit": "https://memegenerator.net/img/instances/54219302/lgtm-ship-it.jpg",
+        "unofficial": "This channel is for help with official roms obtained from https://download.lineageos.org/. Unofficial roms are not made by LineageOS, thus can be very different. Please seek support for unofficial roms from where you got it.",
         "watcannon": "https://64.media.tumblr.com/d655daf4856de7e1a45d4a180ad3d5ea/tumblr_muv69e0RvZ1shlw0so1_500.gif",
         "what": "https://tenor.com/view/goat-scary-animal-crazy-animal-scary-goat-wtf-gif-5548755",
         "why": "Because, that's why.",
