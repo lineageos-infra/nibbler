@@ -13,6 +13,7 @@ class Garbage(commands.Cog):
         "logcat": "Logcat: https://i.imgur.com/bSwnH7B.jpg. Follow this: https://wiki.lineageos.org/logcat.html and paste it to https://vomitb.in",
         "muricana": "https://tenor.com/view/american-eagle-usa-usa-flag-gif-14222446",
         "next": "Another satisfied customer. NEXT!",
+        "nibble": "_OM NOM NOM_",
         "shipit": "https://memegenerator.net/img/instances/54219302/lgtm-ship-it.jpg",
         "unofficial": "This channel is for help with official roms obtained from https://download.lineageos.org/. Unofficial roms are not made by LineageOS, thus can be very different. Please seek support for unofficial roms from where you got it.",
         "watcannon": "https://64.media.tumblr.com/d655daf4856de7e1a45d4a180ad3d5ea/tumblr_muv69e0RvZ1shlw0so1_500.gif",
