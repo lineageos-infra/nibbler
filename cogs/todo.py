@@ -15,7 +15,6 @@ class Todo(commands.Cog):
     @commands.command(help="Manage Todo Lists. Action can be one of 'list', 'add', or 'done'. Note: all list items must be quoted.")
     @commands.has_role("Maintainer")
     async def todo(self, ctx, _list, action, item=None):
-        await ctx.message.delete(delay=30)
         if action == "list":
             items = self.redis.hgetall(f"todo:{_list}")
             reply = ""
@@ -27,21 +26,21 @@ class Todo(commands.Cog):
                     reply += f"{v.decode('utf-8')}: {k.decode('utf-8')}\n"
             if not reply:
                 reply = "This list is empty"
-            await ctx.reply(f"```{reply}```", mention_author=False, delete_after=60)
+            await ctx.reply(f"```{reply}```", mention_author=False)
         elif action == "add":
             if not item:
-                ctx.reply("I can't add nothing", delete_after=30)
+                ctx.reply("I can't add nothing")
+                return
             self.redis.hset(f"todo:{_list}", item, ctx.message.author.name)
             await ctx.message.add_reaction("👍")
         elif action == "done":
             if not item:
-                await ctx.message.add_reaction("👎")
-                await ctx.message.reply("I can't complete nothing", delete_after=30)
-            if not self.redis.hget(f"todo:{_list}", item):
-                await ctx.message.add_reaction("👎")
-                await ctx.message.reply("Item not found", delete_after=30)
-            self.redis.hset(f"todo:{_list}", item, "done")
-            await ctx.message.add_reaction("👍")
+                await ctx.message.reply("I can't complete nothing")
+            elif not self.redis.hget(f"todo:{_list}", item):
+                await ctx.message.reply("Item not found")
+            else:
+                self.redis.hset(f"todo:{_list}", item, "done")
+                await ctx.message.add_reaction("👍")
 
 def setup(bot):
     bot.add_cog(Todo(bot))
