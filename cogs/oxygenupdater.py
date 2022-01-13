@@ -7,6 +7,9 @@ import requests
 
 
 class OxygenUpdater(commands.Cog):
+    HEADERS = {
+        "User-Agent": "Oxygen_updater_5.5.0",
+    }
     IRC_CATEGORY_ID = 628008281121751070
 
     def __init__(self, bot):
@@ -19,21 +22,21 @@ class OxygenUpdater(commands.Cog):
     @commands.command(hidden=True)
     async def ou(self, ctx, device=None, update_method="2"):
         if device == None:
-            req = requests.get("https://oxygenupdater.com/api/v2.6/devices").json()
+            req = requests.get("https://oxygenupdater.com/api/v2.6/devices", headers=self.HEADERS).json()
             devices = { x["id"]: x["name"] for x in sorted(req, key=lambda d: int(d["id"])) }
             if ctx.channel.category_id == self.IRC_CATEGORY_ID:
                 await ctx.reply(file=discord.File(io.StringIO(json.dumps(devices, indent=4)), filename="devices.txt"))
             else:
                 await ctx.reply(f"```\n{json.dumps(devices, indent=4)}\n```")
         elif update_method == "?":
-            req = requests.get(f"https://oxygenupdater.com/api/v2.6/updateMethods/{device}").json()
+            req = requests.get(f"https://oxygenupdater.com/api/v2.6/updateMethods/{device}", headers=self.HEADERS).json()
             update_methods = { x["id"]: x["english_name"] for x in sorted(req, key=lambda d: int(d["id"])) }
             if ctx.channel.category_id == self.IRC_CATEGORY_ID:
                 await ctx.reply(file=discord.File(io.StringIO(json.dumps(update_methods, indent=4)), filename="updateMethods.txt"))
             else:
                 await ctx.reply(f"```\n{json.dumps(update_methods, indent=4)}\n```")
         else:
-            req = requests.get(f"https://oxygenupdater.com/api/v2.6/mostRecentUpdateData/{device}/{update_method}").json()
+            req = requests.get(f"https://oxygenupdater.com/api/v2.6/mostRecentUpdateData/{device}/{update_method}", headers=self.HEADERS).json()
             embed = discord.Embed.from_dict({
                 "title": req["ota_version_number"],
                 "type": "rich",
