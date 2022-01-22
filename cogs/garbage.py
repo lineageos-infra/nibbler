@@ -1,4 +1,5 @@
 from discord.ext import commands
+import random
 import requests
 
 
@@ -14,6 +15,7 @@ class Garbage(commands.Cog):
         "muricana": "https://tenor.com/view/american-eagle-usa-usa-flag-gif-14222446",
         "next": "Another satisfied customer. NEXT!",
         "nibble": "_OM NOM NOM_",
+        "roll": lambda: f"The answer is: {random.choices(['yes', 'no', 'maybe'], weights=[0.05, 0.65, 0.30])[0]}",
         "shipit": "https://memegenerator.net/img/instances/54219302/lgtm-ship-it.jpg",
         "unofficial": "This channel is for help with official roms obtained from https://download.lineageos.org/. Unofficial roms are not made by LineageOS, thus can be very different. Please seek support for unofficial roms from where you got it.",
         "watcannon": "https://64.media.tumblr.com/d655daf4856de7e1a45d4a180ad3d5ea/tumblr_muv69e0RvZ1shlw0so1_500.gif",
@@ -31,7 +33,8 @@ class Garbage(commands.Cog):
 
     @commands.command(hidden=True, name=list(MACROS.keys())[0], aliases=list(MACROS.keys())[1:])
     async def _macro(self, ctx):
-        await ctx.send(self.MACROS[ctx.invoked_with])
+        value = self.MACROS[ctx.invoked_with]
+        await ctx.send(value() if callable(value) else value)
 
     @commands.command(hidden=True)
     async def catfact(self, ctx):
