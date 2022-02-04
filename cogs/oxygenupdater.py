@@ -46,6 +46,7 @@ class OxygenUpdater(commands.Cog):
             if "error" in req:
                 await ctx.reply(f"```\n{json.dumps(req, indent=4)}\n```")
                 return
+            os_version = req["description"].splitlines()[0].split()[-1]
             embed = discord.Embed.from_dict({
                 "title": req["ota_version_number"],
                 "type": "rich",
@@ -67,7 +68,7 @@ class OxygenUpdater(commands.Cog):
                     },
                     {
                         "name": "OS version",
-                        "value": req["os_version"],
+                        "value": os_version,
                         "inline": "true"
                     },
                     {
