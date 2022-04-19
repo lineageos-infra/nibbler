@@ -85,7 +85,7 @@ class OxygenUpdater(commands.Cog):
             await self.reply_and_delete(ctx, content=None, embed=embed)
 
     async def reply_and_delete(self, ctx, *args, **kwargs):
-        message = await ctx.reply(*args, *kwargs)
+        message = await ctx.reply(*args, **kwargs)
         await asyncio.sleep(60)
         await message.delete()
         await ctx.message.delete()
