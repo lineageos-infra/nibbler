@@ -1,5 +1,6 @@
 from discord.ext import tasks, commands
 
+import asyncio
 import discord
 import io
 import json
@@ -24,27 +25,27 @@ class OxygenUpdater(commands.Cog):
         if device == None:
             req = requests.get("https://oxygenupdater.com/api/v2.6/devices", headers=self.HEADERS).json()
             if "error" in req:
-                await ctx.reply(f"```\n{json.dumps(req, indent=4)}\n```")
+                await self.reply_and_delete(ctx, f"```\n{json.dumps(req, indent=4)}\n```")
                 return
             devices = { x["id"]: x["name"] for x in sorted(req, key=lambda d: int(d["id"])) }
             if ctx.channel.category_id == self.IRC_CATEGORY_ID:
-                await ctx.reply(file=discord.File(io.StringIO(json.dumps(devices, indent=4)), filename="devices.txt"))
+                await self.reply_and_delete(ctx, file=discord.File(io.StringIO(json.dumps(devices, indent=4)), filename="devices.txt"))
             else:
-                await ctx.reply(f"```\n{json.dumps(devices, indent=4)}\n```")
+                await self.reply_and_delete(ctx, f"```\n{json.dumps(devices, indent=4)}\n```")
         elif update_method == "?":
             req = requests.get(f"https://oxygenupdater.com/api/v2.6/updateMethods/{device}", headers=self.HEADERS).json()
             if "error" in req:
-                await ctx.reply(f"```\n{json.dumps(req, indent=4)}\n```")
+                await self.reply_and_delete(ctx, f"```\n{json.dumps(req, indent=4)}\n```")
                 return
             update_methods = { x["id"]: x["english_name"] for x in sorted(req, key=lambda d: int(d["id"])) }
             if ctx.channel.category_id == self.IRC_CATEGORY_ID:
-                await ctx.reply(file=discord.File(io.StringIO(json.dumps(update_methods, indent=4)), filename="updateMethods.txt"))
+                await self.reply_and_delete(ctx, file=discord.File(io.StringIO(json.dumps(update_methods, indent=4)), filename="updateMethods.txt"))
             else:
-                await ctx.reply(f"```\n{json.dumps(update_methods, indent=4)}\n```")
+                await self.reply_and_delete(ctx, f"```\n{json.dumps(update_methods, indent=4)}\n```")
         else:
             req = requests.get(f"https://oxygenupdater.com/api/v2.6/mostRecentUpdateData/{device}/{update_method}", headers=self.HEADERS).json()
             if "error" in req:
-                await ctx.reply(f"```\n{json.dumps(req, indent=4)}\n```")
+                await self.reply_and_delete(ctx, f"```\n{json.dumps(req, indent=4)}\n```")
                 return
             embed = discord.Embed.from_dict({
                 "title": req["ota_version_number"],
@@ -81,7 +82,13 @@ class OxygenUpdater(commands.Cog):
                     }
                 ]
             })
-            await ctx.reply(content=None, embed=embed)
+            await self.reply_and_delete(ctx, content=None, embed=embed)
+
+    async def reply_and_delete(self, ctx, *args, **kwargs):
+        message = await ctx.reply(*args, *kwargs)
+        await asyncio.sleep(5)
+        await message.delete()
+        await ctx.message.delete()
 
     def sizeof_fmt(self, num, suffix="B"):
         for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
