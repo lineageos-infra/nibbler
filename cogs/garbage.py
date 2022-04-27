@@ -46,6 +46,11 @@ class Garbage(commands.Cog):
         req = requests.get("https://itvends.com/vend.php?format=text")
         await ctx.send(f"_vends {req.text}_")
 
+    @commands.command(hidden=True)
+    async def goat(self, ctx):
+        req = requests.get("https://goats.fly.dev/")
+        await ctx.send(f"zifnab is going to become a goat farmer becasue: {req.text}")
+
 
 def setup(bot):
     bot.add_cog(Garbage(bot))
