@@ -49,7 +49,7 @@ class Garbage(commands.Cog):
     @commands.command(hidden=True)
     async def goat(self, ctx):
         req = requests.get("https://goats.fly.dev/")
-        await ctx.send(f"zifnab is going to become a goat farmer becasue: {req.text}")
+        await ctx.send(f"zifnab is going to become a goat farmer because {req.text}")
 
 
 def setup(bot):
