@@ -21,7 +21,7 @@ class OxygenUpdater(commands.Cog):
         print(f"Loaded {__name__}")
 
     @commands.command(hidden=True)
-    async def ou(self, ctx, device=None, update_method="2"):
+    async def ou(self, ctx, device=None, update_method="2", incremental_system_version=""):
         if device == None:
             req = requests.get("https://oxygenupdater.com/api/v2.6/devices", headers=self.HEADERS).json()
             if "error" in req:
@@ -43,7 +43,10 @@ class OxygenUpdater(commands.Cog):
             else:
                 await self.reply_and_delete(ctx, f"```\n{json.dumps(update_methods, indent=4)}\n```")
         else:
-            req = requests.get(f"https://oxygenupdater.com/api/v2.6/mostRecentUpdateData/{device}/{update_method}", headers=self.HEADERS).json()
+            if len(incremental_system_version) > 0:
+                req = requests.get(f"https://oxygenupdater.com/api/v2.6/updateData/{device}/{update_method}/{incremental_system_version}", headers=self.HEADERS).json()
+            else:
+                req = requests.get(f"https://oxygenupdater.com/api/v2.6/mostRecentUpdateData/{device}/{update_method}", headers=self.HEADERS).json()
             if "error" in req:
                 await self.reply_and_delete(ctx, f"```\n{json.dumps(req, indent=4)}\n```")
                 return
