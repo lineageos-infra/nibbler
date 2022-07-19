@@ -56,8 +56,9 @@ class Reddit(commands.Cog):
                     }
                 })
                 await self.channel.send(content=None, embed=embed)
-                self.redis.sadd("reddit-fetch:done", post.id)
-                self.done.append(post.id)
+                self.redis.lpush("reddit-fetch:done", post.id)
+                self.redis.ltrim("reddit-fetch:done", 0, 99)
+                self.done = [post.id, *self.done[:99]]
         except Exception as e:
             print(e)
 
