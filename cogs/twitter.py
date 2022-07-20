@@ -97,12 +97,12 @@ class Twitter(commands.Cog):
             pass
 
     @commands.group()
-    @commands.is_owner()
+    @commands.has_role("Project Director")
     async def twitter(self, ctx):
         pass
 
     @twitter.command()
-    @commands.is_owner()
+    @commands.has_role("Project Director")
     async def flush(self, ctx):
         await ctx.message.delete()
         self.redis.delete("twitter-fetch:done")

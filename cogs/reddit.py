@@ -63,12 +63,12 @@ class Reddit(commands.Cog):
             print(e)
 
     @commands.group()
-    @commands.is_owner()
+    @commands.has_role("Project Director")
     async def reddit(self, ctx):
         pass
 
     @reddit.command()
-    @commands.is_owner()
+    @commands.has_role("Project Director")
     async def flush(self, ctx):
         await ctx.message.delete()
         self.redis.delete("reddit-fetch:done")
