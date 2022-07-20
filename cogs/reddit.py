@@ -23,7 +23,7 @@ class Reddit(commands.Cog):
         if not hasattr(self, "channel"):
             self.channel = discord.utils.get(self.bot.guilds[0].channels, name="reddit")
         if not hasattr(self, "done"):
-            self.done = [x.decode("utf-8") for x in self.redis.smembers("reddit-fetch:done")]
+            self.done = [x.decode("utf-8") for x in self.redis.lrange("reddit-fetch:done", 0, -1)]
         if not hasattr(self, "_r"):
             self._r = asyncpraw.Reddit(
                 user_agent="LineageOS Discord Bot v1.0",
