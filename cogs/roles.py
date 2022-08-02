@@ -47,8 +47,8 @@ class Roles(commands.Cog):
     async def reactionrole(self, ctx):
         pass
 
-    @reactionrole.command(help="add a role for reaction-joining")
-    async def add(self, ctx, category, role, emoji, info):
+    @reactionrole.command(name="add", help="add a role for reaction-joining")
+    async def add_role(self, ctx, category: str, role: str, emoji: str, info: str):
         await ctx.message.delete()
         if not role in [x.name for x in ctx.guild.roles]:
             await ctx.guild.create_role(name=role, reason="auto created for role-reactions")
@@ -175,8 +175,8 @@ class Roles(commands.Cog):
 
         await ctx.message.add_reaction("👍")
 
-    @private.command(help="Add a user to the current room. Note: user is in the form nick#1234")
-    async def add(self, ctx, user):
+    @private.command(name="add", help="Add a user to the current room. Note: user is in the form nick#1234")
+    async def add_private(self, ctx, user):
         if not discord.utils.get(ctx.author.roles, name=ctx.channel.name):
             await ctx.reply("You don't have permission to do this.")
             return
