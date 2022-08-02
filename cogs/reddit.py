@@ -21,7 +21,12 @@ class Reddit(commands.Cog):
         if len(self.bot.guilds) == 0:
             return
         if not hasattr(self, "channel"):
-            self.channel = discord.utils.get(self.bot.guilds[0].channels, name="reddit")
+            channel = self.redis.hget("config", "reddit.channel")
+            if not channel:
+                print("Please !config hset config reddit.channel #channel")
+                return
+            channel_id = channel.decode("utf-8")[2:-1]
+            self.channel = discord.utils.get(self.bot.guilds[0].channels, id=int(channel_id))
         if not hasattr(self, "done"):
             self.done = [x.decode("utf-8") for x in self.redis.lrange("reddit-fetch:done", 0, -1)]
         if not hasattr(self, "_r"):
