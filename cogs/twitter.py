@@ -23,8 +23,15 @@ class Twitter(commands.Cog):
     async def fetch_posts(self):
         if len(self.bot.guilds) == 0:
             return
+
         if not hasattr(self, "channel"):
-            self.channel = discord.utils.get(self.bot.guilds[0].channels, name="twitter")
+            channel = self.redis.hget("config", "twitter.channel")
+            if not channel:
+                print("Please !config hset config twitter.channel #channel")
+                return
+            channel_id = channel.decode("utf-8")[2:-1]
+            self.channel = discord.utils.get(self.bot.guilds[0].channels, id=int(channel_id))
+
         if not hasattr(self, "done"):
             self.done = [x.decode("utf-8") for x in self.redis.lrange("twitter-fetch:done", 0, -1)]
 
