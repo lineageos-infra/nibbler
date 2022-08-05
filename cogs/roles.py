@@ -49,23 +49,22 @@ class Roles(commands.Cog):
 
     @reactionrole.command(name="add", help="add a role for reaction-joining")
     async def add_role(self, ctx, category: str, role: str, emoji: str, info: str):
-        await ctx.message.delete()
         if not role in [x.name for x in ctx.guild.roles]:
             await ctx.guild.create_role(name=role, reason="auto created for role-reactions")
         self.redis.hset("roles", emoji, role)
         self.redis.hset("roleinfo", emoji, info)
         self.redis.hset("rolecategories", emoji, category)
+        await ctx.message.add_reaction("👍")
 
     @reactionrole.command(name="del", help="delete a role by name")
     async def _del(self, ctx, emoji):
-        await ctx.message.delete()
         self.redis.hdel("roles", emoji)
         self.redis.hdel("roleinfo", emoji)
         self.redis.hdel("rolecategories", emoji)
+        await ctx.message.add_reaction("👍")
 
     @reactionrole.command(help="list all the roles available for reactions")
     async def get(self, ctx):
-        await ctx.message.delete()
         roles = self.redis.hgetall("roles")
         info = self.redis.hgetall("roleinfo")
         categories = self.redis.hgetall("rolecategories")
@@ -76,7 +75,8 @@ class Roles(commands.Cog):
             message += f"{k.decode('utf-8')}: {v.decode('utf-8')} (info: {i}, category: {c})\n"
 
 
-        await ctx.send(message, delete_after=20)
+        await ctx.send(message)
+        await ctx.message.add_reaction("👍")
 
     async def do_update(self):
         if len(self.bot.guilds) == 0:
@@ -119,8 +119,8 @@ class Roles(commands.Cog):
 
     @reactionrole.command(help="trigger an update of the reaction-role message in #roles")
     async def update(self, ctx):
-        await ctx.message.delete()
         await self.do_update()
+        await ctx.message.add_reaction("👍")
 
     @tasks.loop(minutes=15)
     async def update_task(self):
