@@ -28,10 +28,7 @@ class OxygenUpdater(commands.Cog):
                 await self.reply_and_delete(ctx, f"```\n{json.dumps(req, indent=4)}\n```")
                 return
             devices = { x["id"]: x["name"] for x in sorted(req, key=lambda d: int(d["id"])) }
-            if ctx.channel.category_id == self.IRC_CATEGORY_ID:
-                await self.reply_and_delete(ctx, file=discord.File(io.StringIO(json.dumps(devices, indent=4)), filename="devices.txt"))
-            else:
-                await self.reply_and_delete(ctx, f"```\n{json.dumps(devices, indent=4)}\n```")
+            await self.reply_and_delete(ctx, file=discord.File(io.StringIO(json.dumps(devices, indent=4)), filename="devices.txt"))
         elif update_method == "?":
             req = requests.get(f"https://oxygenupdater.com/api/v2.6/updateMethods/{device}", headers=self.HEADERS).json()
             if "error" in req:
