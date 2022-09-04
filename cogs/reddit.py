@@ -2,6 +2,7 @@ import os
 
 import discord
 import asyncpraw
+import textwrap
 from discord.ext import tasks, commands
 
 class Reddit(commands.Cog):
@@ -43,7 +44,7 @@ class Reddit(commands.Cog):
                 if post.id in self.done:
                     continue
                 embed = discord.Embed.from_dict({
-                    "title": f"{post.title} * /r/LineageOS",
+                    "title": textwrap.shorten(f"{post.title} * /r/LineageOS", 256),
                     "type": "rich",
                     "description": post.selftext[:4000]
                     if hasattr(post, "selftext")
