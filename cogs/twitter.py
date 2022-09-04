@@ -107,7 +107,7 @@ class Twitter(commands.Cog):
                 user_id_str = tweets[tweet_id]['user_id_str']
                 screen_name = users[user_id_str]['screen_name']
 
-                await self.channel.send(f"https://twitter.com/{screen_name}/status/{tweet_id}")
+                await self.channel.send(f"https://vxtwitter.com/{screen_name}/status/{tweet_id}")
                 self.redis.lpush("twitter-fetch:done", tweet_id)
                 self.redis.ltrim("twitter-fetch:done", 0, 99)
                 self.done = [tweet_id, *self.done[:99]]
