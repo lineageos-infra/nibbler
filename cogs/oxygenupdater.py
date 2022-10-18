@@ -44,7 +44,7 @@ class OxygenUpdater(commands.Cog):
                 req = requests.get(f"https://oxygenupdater.com/api/v2.6/updateData/{device}/{update_method}/{incremental_system_version}", headers=self.HEADERS).json()
             else:
                 req = requests.get(f"https://oxygenupdater.com/api/v2.6/mostRecentUpdateData/{device}/{update_method}", headers=self.HEADERS).json()
-            if "error" in req:
+            if "error" in req or "information" in req:
                 await self.reply_and_delete(ctx, f"```\n{json.dumps(req, indent=4)}\n```")
                 return
             embed = discord.Embed.from_dict({
