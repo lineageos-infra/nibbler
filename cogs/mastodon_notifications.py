@@ -48,7 +48,7 @@ class MastodonNotification(commands.Cog):
         if last_notif:
             url = f"{url}&since_id={last_notif}"
 
-        req = requests.get(url, headers=self.headers)
+        req = requests.get(url, headers=self.headers, timeout=5)
 
         if req.status_code == 200:
             for notif in req.json():
