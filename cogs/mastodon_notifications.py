@@ -13,11 +13,6 @@ class MastodonNotification(commands.Cog):
             "Authorization": f"Bearer {os.environ.get('MASTODON_ACCESS_TOKEN', '')}"
         }
 
-        self.mastodon = Mastodon(
-            access_token = os.environ.get("MASTODON_ACCESS_TOKEN"),
-            api_base_url = os.environ.get("MASTODON_BASE_URL"),
-        )
-
     def cog_unload(self):
         self.fetch_notifications.cancel()
 
