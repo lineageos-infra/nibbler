@@ -50,11 +50,7 @@ class OxygenUpdater(commands.Cog):
             embed = discord.Embed.from_dict({
                 "title": req["ota_version_number"],
                 "type": "rich",
-                "description": req["changelog"]
-                if req["changelog"]
-                else "" + "..."
-                if len(req["changelog"]) > 140
-                else "",
+                "description": req["changelog"][:4096],
                 "url": req["download_url"],
                 "color": 15401000,
                 "thumbnail": {
