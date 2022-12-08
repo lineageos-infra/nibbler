@@ -9,6 +9,7 @@ import requests
 class Mastodon(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.fetch_mentions.start()
         self.headers = {
             "Authorization": f"Bearer {os.environ.get('MASTODON_ACCESS_TOKEN', '')}"
         }
