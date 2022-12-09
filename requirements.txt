@@ -9,7 +9,7 @@ asyncprawcore==2.3.0
 attrs==21.2.0
 beautifulsoup4==4.11.1
 black==21.9b0
-certifi==2021.5.30
+certifi==2022.12.7
 chardet==4.0.0
 charset-normalizer==2.0.6
 click==8.0.1
