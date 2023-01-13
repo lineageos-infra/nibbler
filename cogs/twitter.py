@@ -113,6 +113,7 @@ class Twitter(commands.Cog):
     async def flush(self, ctx):
         await ctx.message.delete()
         self.redis.delete("twitter-fetch:done")
+        self.done = []
 
 
 def setup(bot):
