@@ -2,10 +2,8 @@ from discord.ext import tasks, commands
 
 import dateutil.parser
 import discord
-import os
 import requests
 import sys
-import tweepy
 import urllib.parse
 
 
@@ -36,15 +34,6 @@ class Twitter(commands.Cog):
 
         if not hasattr(self, "done"):
             self.done = [x.decode("utf-8") for x in self.redis.lrange("twitter-fetch:done", 0, -1)]
-
-
-        if not hasattr(self, "twitter_client") and "ENABLE_TWITTER" in os.environ:
-            self.client = tweepy.Client(
-                consumer_key=os.environ.get("TWITTER_CONSUMER_KEY"),
-                consumer_secret=os.environ.get("TWITTER_CONSUMER_SECRET"),
-                access_token=os.environ.get("TWITTER_ACCESS_TOKEN"),
-                access_token_secret=os.environ.get("TWITTER_ACCESS_TOKEN_SECRET"),
-            )
 
         try:
             headers = {
@@ -124,15 +113,6 @@ class Twitter(commands.Cog):
     async def flush(self, ctx):
         await ctx.message.delete()
         self.redis.delete("twitter-fetch:done")
-
-    @twitter.command()
-    @commands.has_role("Project Director")
-    async def tweet(self, ctx, *, text):
-        if self.client:
-            self.client.create_tweet(text=text)
-            await ctx.message.add_reaction("👍")
-        else:
-            await ctx.message.add_reaction("❌")
 
 
 def setup(bot):
