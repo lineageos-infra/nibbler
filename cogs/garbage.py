@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from discord.ext import commands
 import random
 import requests
@@ -52,6 +53,26 @@ class Garbage(commands.Cog):
         req = requests.get("https://goats.fly.dev/")
         await ctx.send(f"zifnab is going to become a goat farmer because {req.text}")
 
+    @commands.command(hidden=True)
+    async def when(self, ctx, *devices):
+        reply = []
+
+        for device in devices:
+            try:
+                random.seed(device, version=1)
+            except:
+                random.seed(device)
+
+            dw = int(random.random() * 7) + 1
+
+            date = datetime.today()
+            while dw != date.isoweekday():
+                date += timedelta(days=1)
+
+            reply.append(str((device, date.strftime("%A, %Y-%m-%d"))))
+
+        if reply := '\n'.join(reply):
+            await ctx.reply(reply)
 
 def setup(bot):
     bot.add_cog(Garbage(bot))
