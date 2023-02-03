@@ -90,7 +90,7 @@ class Twitter(commands.Cog):
                 "spelling_corrections": 1,
                 "include_ext_edit_control": "true",
                 "ext": "mediaStats,highlightedLabel,hasNftAvatar,voiceInfo,enrichments,superFollowMetadata,unmentionInfo,editControl,collab_control,vibe",
-            }), headers=headers, timeout=5)
+            }, safe="@(),"), headers=headers, timeout=5)
             if request.status_code != 200:
                 print(f"Failed to get search results (status_code: {request.status_code}, text: {request.text})",
                       file=sys.stderr)
