@@ -52,7 +52,7 @@ class Twitter(commands.Cog):
             headers["x-guest-token"] = request.json()["guest_token"]
 
             # search for newest posts mentioning @LineageAndroid
-            request = requests.get("https://twitter.com/i/api/2/search/adaptive.json?" + urllib.parse.urlencode({
+            request = requests.get("https://api.twitter.com/2/search/adaptive.json?" + urllib.parse.urlencode({
                 "include_profile_interstitial_type": 1,
                 "include_blocking": 1,
                 "include_blocked_by": 1,
