@@ -43,7 +43,8 @@ class Twitter(commands.Cog):
             }
 
             # get guest token
-            request = requests.post("https://api.twitter.com/1.1/guest/activate.json", headers=headers, timeout=5)
+            session = requests.Session()
+            request = session.post("https://api.twitter.com/1.1/guest/activate.json", headers=headers, timeout=5)
             if request.status_code != 200:
                 print(f"Failed to get guest token (status_code: {request.status_code}, text: {request.text})",
                       file=sys.stderr)
@@ -52,7 +53,7 @@ class Twitter(commands.Cog):
             headers["x-guest-token"] = request.json()["guest_token"]
 
             # search for newest posts mentioning @LineageAndroid
-            request = requests.get("https://api.twitter.com/2/search/adaptive.json?" + urllib.parse.urlencode({
+            request = session.get("https://api.twitter.com/2/search/adaptive.json?" + urllib.parse.urlencode({
                 "include_profile_interstitial_type": 1,
                 "include_blocking": 1,
                 "include_blocked_by": 1,
