@@ -40,6 +40,12 @@ class Twitter(commands.Cog):
                 # https://abs.twimg.com/responsive-web/client-web/main.72c84465.js
                 "authorization": "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA",
                 "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
+                "sec-ch-ua": '"Not_A Brand";v="99", "Google Chrome";v="109", "Chromium";v="109"',
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "Linux",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-site",
             }
 
             # get guest token
@@ -50,7 +56,11 @@ class Twitter(commands.Cog):
                       file=sys.stderr)
                 return
 
+            headers["origin"] = "https://twitter.com"
+            headers["referer"] = "https://twitter.com/"
             headers["x-guest-token"] = request.json()["guest_token"]
+            headers["x-twitter-active-user"] = "yes"
+            headers["x-twitter-client-langua"] = "en"
 
             # search for newest posts mentioning @LineageAndroid
             request = session.get("https://api.twitter.com/2/search/adaptive.json?" + urllib.parse.urlencode({
