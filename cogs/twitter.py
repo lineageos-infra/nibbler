@@ -95,6 +95,7 @@ class Twitter(commands.Cog):
                     "send_error_codes": "true",
                     "simple_quoted_tweet": "true",
                     "q": "(@LineageAndroid)",
+                    "tweet_search_mode": "live",
                     "query_source": "typed_query",
                     "count": 20,
                     "requestContext": "launch",
