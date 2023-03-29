@@ -9,4 +9,3 @@ REDIS_HOST = "lineageos-redis.internal"
 REDIS_PORT = 6379
 REDIS_DB   = 0
 PYTHONUNBUFFERED = "true"
-ENABLE_TWITTER = 1
