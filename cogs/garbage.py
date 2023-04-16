@@ -14,7 +14,7 @@ class Garbage(commands.Cog):
         "gapps": "https://wiki.lineageos.org/gapps.html",
         "how": "Stop asking questions you'll go blind.",
         "logcat": "Logcat: https://i.imgur.com/bSwnH7B.jpg. Follow this: https://wiki.lineageos.org/logcat.html and paste it to https://vomitb.in",
-        "steppum"[::-1]: "5289ddfaa0532477f5c920dc85dec162/bmobkruof/moc.buhtig.tsig//:sptth"[::-1],
+        "steppum"[::-1]: "steppum/oi.buhtig.7331kul//:sptth"[::-1],
         "muricana": "https://tenor.com/view/american-eagle-usa-usa-flag-gif-14222446",
         "next": "Another satisfied customer. NEXT!",
         "nibble": "_OM NOM NOM_",
