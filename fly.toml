@@ -1,11 +1,15 @@
-app = "lineageos-nibbler"
+# fly.toml app configuration file generated for lineageos-nibbler on 2023-04-30T18:51:51-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
+app = "lineageos-nibbler"
+primary_region = "sea"
 kill_signal = "SIGINT"
-kill_timeout = 5
-processes = []
+kill_timeout = "5s"
 
 [env]
-REDIS_HOST = "lineageos-redis.internal"
-REDIS_PORT = 6379
-REDIS_DB   = 0
-PYTHONUNBUFFERED = "true"
+  PYTHONUNBUFFERED = "true"
+  REDIS_DB = "0"
+  REDIS_HOST = "lineageos-redis.internal"
+  REDIS_PORT = "6379"
