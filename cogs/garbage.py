@@ -75,5 +75,16 @@ class Garbage(commands.Cog):
         if reply := '\n'.join(reply):
             await ctx.reply(reply)
 
+    @commands.command(hidden=True)
+    async def wiki(self, ctx, device):
+        req = requests.get("https://raw.githubusercontent.com/LineageOS/hudson/master/updater/devices.json")
+        devices = set(e['model'] for e in req.json())
+
+        if device in devices:
+            await ctx.send(f"Info: https://wiki.lineageos.org/devices/{device}")
+        else:
+            await ctx.send(f"Maybe you could support {device} yourself?")
+
+
 def setup(bot):
     bot.add_cog(Garbage(bot))
