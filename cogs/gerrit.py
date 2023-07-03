@@ -28,7 +28,6 @@ class Gerrit(commands.Cog):
             )
             change = json.loads(req.text[4:])
             embed = discord.Embed(
-                content=f"{self.gerrit_url}/c/{change['_number']}: {change['subject']}",
                 title=textwrap.shorten(f"{change['_number']}: {change['subject']} ({change['status']})", 256),
                 description=change["revisions"][change["current_revision"]]["commit"]["message"].split("\n", 1)[-1].strip(),
                 type="rich",
@@ -52,5 +51,5 @@ class Gerrit(commands.Cog):
             await message.reply(content=None, embed=embed, mention_author=False)
 
 
-def setup(bot):
-    bot.add_cog(Gerrit(bot))
+async def setup(bot):
+    await bot.add_cog(Gerrit(bot))

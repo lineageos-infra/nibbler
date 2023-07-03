@@ -84,7 +84,7 @@ class Roles(commands.Cog):
         if not hasattr(self, 'channel'):
             self.channel = discord.utils.get(self.bot.guilds[0].channels, name="roles")
 
-        message = await self.channel.history(limit=1).flatten()
+        message = [x async for x in self.channel.history(limit=1)]
         if message:
             cmd = message[0].edit
             await message[0].clear_reactions()
@@ -113,7 +113,7 @@ class Roles(commands.Cog):
         m = await cmd(content=content)
 
         # react to it with all the things
-        message = await self.channel.history(limit=1).flatten()
+        message = [x async for x in self.channel.history(limit=1)]
         for k, v in roles.items():
             await message[0].add_reaction(k.decode('utf-8'))
 
@@ -212,5 +212,5 @@ class Roles(commands.Cog):
             await ctx.author.remove_roles(role)
         await ctx.message.add_reaction("👍")
 
-def setup(bot):
-    bot.add_cog(Roles(bot))
+async def setup(bot):
+    await bot.add_cog(Roles(bot))

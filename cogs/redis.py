@@ -40,5 +40,5 @@ class Redis(commands.Cog):
         await ctx.send(f"```{text}```")
 
 
-def setup(bot):
-    bot.add_cog(Redis(bot))
+async def setup(bot):
+    await bot.add_cog(Redis(bot))

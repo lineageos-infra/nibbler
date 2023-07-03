@@ -75,5 +75,5 @@ class Mastodon(commands.Cog):
             print(req.status_code, req.text)
 
 
-def setup(bot):
-    bot.add_cog(Mastodon(bot))
+async def setup(bot):
+    await bot.add_cog(Mastodon(bot))

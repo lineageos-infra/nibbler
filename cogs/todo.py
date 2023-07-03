@@ -42,5 +42,5 @@ class Todo(commands.Cog):
                 self.redis.hset(f"todo:{_list}", item, "done")
                 await ctx.message.add_reaction("👍")
 
-def setup(bot):
-    bot.add_cog(Todo(bot))
+async def setup(bot):
+    await bot.add_cog(Todo(bot))

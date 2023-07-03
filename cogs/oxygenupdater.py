@@ -94,5 +94,5 @@ class OxygenUpdater(commands.Cog):
         return f"{num:.1f}Yi{suffix}"
 
 
-def setup(bot):
-    bot.add_cog(OxygenUpdater(bot))
+async def setup(bot):
+    await bot.add_cog(OxygenUpdater(bot))

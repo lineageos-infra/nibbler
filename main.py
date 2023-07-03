@@ -1,28 +1,31 @@
+import asyncio
 import os
 
 import discord
 from discord.ext import commands
 
-intents = discord.Intents.default()
-intents.members = True
+class Bot(commands.Bot):
+    def __init__(self, command_prefix, *, intents, **options):
+        super().__init__(command_prefix, intents=intents, **options)
+
+        help_command = discord.utils.get(self.commands, name="help")
+        help_command.add_check(self.has_any_role)
+
+    @staticmethod
+    def has_any_role(ctx):
+        # is in guild, has author, and has some role besides @everyone
+        return ctx.guild and ctx.author and len(ctx.author.roles) > 1
+
+    async def setup_hook(self):
+        for cog in os.listdir("./cogs"):
+            if cog.endswith(".py"):
+                await self.load_extension(f"cogs.{cog[:-3]}")
+
+        for cog in self.cogs:
+            self.get_cog(cog).redis = self.get_cog("Redis").redis
 
 
-def has_any_role(ctx):
-    # is in guild, has author, and has some role besides @everyone
-    return ctx.guild and ctx.author and len(ctx.author.roles) > 1
-
-bot = commands.Bot(command_prefix="!", intents=intents)
-
-help_command = discord.utils.get(bot.commands, name="help")
-help_command.add_check(has_any_role)
-
-for cog in os.listdir("./cogs"):
-    if cog.endswith(".py"):
-        bot.load_extension(f"cogs.{cog[:-3]}")
-
-for cog in bot.cogs:
-    bot.get_cog(cog).redis = bot.get_cog("Redis").redis
-
+bot = Bot(command_prefix="!", intents=discord.Intents.all())
 
 @bot.event
 async def on_ready():

@@ -79,5 +79,5 @@ class Reddit(commands.Cog):
         await ctx.message.delete()
         self.redis.delete("reddit-fetch:done")
 
-def setup(bot):
-    bot.add_cog(Reddit(bot))
+async def setup(bot):
+    await bot.add_cog(Reddit(bot))

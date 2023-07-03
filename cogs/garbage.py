@@ -75,5 +75,5 @@ class Garbage(commands.Cog):
         if reply := '\n'.join(reply):
             await ctx.reply(reply)
 
-def setup(bot):
-    bot.add_cog(Garbage(bot))
+async def setup(bot):
+    await bot.add_cog(Garbage(bot))

@@ -19,7 +19,7 @@ class Admin(commands.Cog):
             cogs = os.listdir("./cogs")
             for cog in cogs:
                 if cog.endswith(".py"):
-                    self.bot.reload_extension(f"cogs.{cog[:-3]}")
+                    await self.bot.reload_extension(f"cogs.{cog[:-3]}")
 
         except Exception as e:
             await message.edit(content=f"Error: {e}", delete_after=10)
@@ -27,5 +27,5 @@ class Admin(commands.Cog):
             await message.edit(content="Reloaded!", delete_after=10)
 
 
-def setup(bot):
-    bot.add_cog(Admin(bot))
+async def setup(bot):
+    await bot.add_cog(Admin(bot))

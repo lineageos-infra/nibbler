@@ -14,5 +14,5 @@ class Util(commands.Cog):
         return [x.decode("utf-8") for x in self.redis.smembers("superuser_roles")]
 
 
-def setup(bot):
-    bot.add_cog(Util(bot))
+async def setup(bot):
+    await bot.add_cog(Util(bot))
