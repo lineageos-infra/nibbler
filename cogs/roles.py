@@ -1,7 +1,5 @@
-from discord.ext import tasks, commands
-
 import discord
-from discord.ext.commands.errors import PrivateMessageOnly
+from discord.ext import tasks, commands
 
 
 class Roles(commands.Cog):

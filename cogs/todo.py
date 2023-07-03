@@ -1,7 +1,5 @@
-from discord.ext import tasks, commands
+from discord.ext import commands
 
-import discord
-import asyncpraw
 
 class Todo(commands.Cog):
     def __init__(self, bot):

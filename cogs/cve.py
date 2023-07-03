@@ -1,11 +1,8 @@
-import json
-import os
 import re
-import time
 
 import discord
-from discord.ext import commands
 import requests
+from discord.ext import commands
 
 
 class Cve(commands.Cog):
