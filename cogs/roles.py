@@ -7,7 +7,7 @@ from discord.ext.commands.errors import PrivateMessageOnly
 class Roles(commands.Cog):
     '''Roles provides multiple funtions - this is where most of the permission related stuff for lineage lives.
     - makes #roles operate, see !help reactionrole
-    - quickly add people to the maintainer role via !maintainer (mention or user#1234)
+    - quickly add people to the maintainer role via !maintainer (mention or user)
     '''
     def __init__(self, bot):
         self.bot = bot
@@ -126,19 +126,17 @@ class Roles(commands.Cog):
     async def update_task(self):
         await self.do_update()
 
-    @commands.command(help="Add maintainers via either a mention (@user) or a string (user#0000)")
+    @commands.command(help="Add maintainers via either a mention (@user) or a string (user)")
     @commands.has_role("Project Director")
     async def maintainer(self, ctx, *args):
         role = discord.utils.get(ctx.guild.roles, name="Maintainer")
         users = ctx.message.mentions
         for arg in args:
-            if '#' in arg:
-                query = arg.split("#")
-                u = discord.utils.get(ctx.guild.members, name=query[0], discriminator=query[1])
-                if u:
-                    users.append(u)
-                else:
-                    await ctx.reply(f"User \"{arg}\" doesn't exist in this server")
+            u = discord.utils.get(ctx.guild.members, name=arg)
+            if u:
+                users.append(u)
+            else:
+                await ctx.reply(f"User \"{arg}\" doesn't exist in this server")
         if users:
             await ctx.message.add_reaction("✅")
             for user in users:
@@ -175,16 +173,12 @@ class Roles(commands.Cog):
 
         await ctx.message.add_reaction("👍")
 
-    @private.command(name="add", help="Add a user to the current room. Note: user is in the form nick#1234")
+    @private.command(name="add", help="Add a user to the current room.")
     async def add_private(self, ctx, user):
         if not discord.utils.get(ctx.author.roles, name=ctx.channel.name):
             await ctx.reply("You don't have permission to do this.")
             return
-        if not '#' in user:
-            await ctx.reply("Since this channel's private you'll need to invite them as user#1234")
-            return
-        name, discriminator = user.split("#")
-        who = discord.utils.get(ctx.guild.members, name=name, discriminator=discriminator)
+        who = discord.utils.get(ctx.guild.members, name=user)
         if not who:
             await ctx.reply("This user doesn't exist in this server")
             return
@@ -195,16 +189,12 @@ class Roles(commands.Cog):
         await who.add_roles(role)
         await ctx.message.add_reaction("👍")
 
-    @private.command(help="kick a user from the current room. Note: user is in the form nick#1234")
+    @private.command(help="kick a user from the current room.")
     async def kick(self, ctx, user):
         if not discord.utils.get(ctx.author.roles, name=ctx.channel.name):
             await ctx.reply("You don't have permission to do this.")
             return
-        if not '#' in user:
-            await ctx.reply("Since this channel's private you'll need to kick them as user#1234")
-            return
-        name, discriminator = user.split("#")
-        who = discord.utils.get(ctx.guild.members, name=name, discriminator=discriminator)
+        who = discord.utils.get(ctx.guild.members, name=user)
         if not who:
             await ctx.reply("This user doesn't exist in this server")
             return
