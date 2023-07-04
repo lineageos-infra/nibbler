@@ -124,17 +124,17 @@ class Roles(commands.Cog):
     async def update_task(self):
         await self.do_update()
 
-    @commands.command(help="Add maintainers via either a mention (@user) or a string (user)")
+    @commands.command(help="Add maintainers via their global user name")
     @commands.has_role("Project Director")
     async def maintainer(self, ctx, *args):
         role = discord.utils.get(ctx.guild.roles, name="Maintainer")
-        users = ctx.message.mentions
+        users = []
         for arg in args:
             u = discord.utils.get(ctx.guild.members, name=arg)
             if u:
                 users.append(u)
             else:
-                await ctx.reply(f"User \"{arg}\" doesn't exist in this server")
+                await ctx.reply(f"User \"{arg}\" doesn't exist in this server. note: this _must_ be their global username, not their nick.")
         if users:
             await ctx.message.add_reaction("✅")
             for user in users:
@@ -178,7 +178,7 @@ class Roles(commands.Cog):
             return
         who = discord.utils.get(ctx.guild.members, name=user)
         if not who:
-            await ctx.reply("This user doesn't exist in this server")
+            await ctx.reply("This user doesn't exist in this server. note: this _must_ be their global username, not their nick")
             return
         role = discord.utils.get(ctx.guild.roles, name=ctx.channel.name)
         if not role:
@@ -194,7 +194,7 @@ class Roles(commands.Cog):
             return
         who = discord.utils.get(ctx.guild.members, name=user)
         if not who:
-            await ctx.reply("This user doesn't exist in this server")
+            await ctx.reply("This user doesn't exist in this server. note: this _must_ be their global username, not their nick")
             return
         role = discord.utils.get(ctx.guild.roles, name=ctx.channel.name)
         if not role:
