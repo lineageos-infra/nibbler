@@ -33,7 +33,7 @@ async def on_ready():
 
 @bot.event
 async def on_command_error(ctx, error):
-    if not has_any_role(ctx):
+    if not bot.has_any_role(ctx):
         await ctx.message.reply(f"No.")
     else:
         await ctx.message.reply(f"error: {error}")
