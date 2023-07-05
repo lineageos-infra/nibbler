@@ -50,7 +50,7 @@ class Mastodon(commands.Cog):
 
         if req.status_code == 200:
             for notif in req.json():
-                if not last_notif or notif["id"] > last_notif:
+                if not last_notif or int(notif["id"]) > int(last_notif):
                     last_notif = notif["id"]
 
                 soup = BeautifulSoup(notif["status"]["content"], features="html.parser")
