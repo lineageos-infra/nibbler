@@ -26,7 +26,7 @@ class Redis(commands.Cog):
         print(f"Loaded {__name__}")
 
     @commands.command(help="(owner only) interact with bot config redis store")
-    @commands.is_owner()
+    @commands.has_role("Project Director")
     async def config(self, ctx, command, *args):
         text = getattr(self.redis, command)(*args)
 
