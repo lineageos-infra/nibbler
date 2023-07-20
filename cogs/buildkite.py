@@ -1,11 +1,10 @@
 import discord
 from discord.ext import tasks, commands
+import os
 import requests
 
 class Buildkite(commands.Cog):
-    '''Buildkite provides multiple funtions - this is where most of the permission related stuff for lineage lives.
-    - makes #roles operate, see !help buildkite
-    - quickly add people to the maintainer role via !maintainer (mention or user)
+    '''Buildkite launches builds
     '''
     def __init__(self, bot):
         self.bot = bot
