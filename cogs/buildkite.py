@@ -26,3 +26,5 @@ class Buildkite(commands.Cog):
         resp = requests.post('https://buildkite.com/v2/organizations/LineageOS/pipelines/forcepush/builds', json=data, headers={"Authorization", "Bearer {os.environ.get('BUILDKITE_TOKEN')"})
         if resp.status_code == 201:
             ctx.message.reply(f"started: {resp.json()['web_url']}")
+async def setup(bot):
+    await bot.add_cog(Buildkite(bot))
