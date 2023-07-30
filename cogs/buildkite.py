@@ -1,7 +1,9 @@
 import discord
 from discord.ext import tasks, commands
+from datetime import datetime
 import os
 import requests
+import uuid
 
 class Buildkite(commands.Cog):
     '''Buildkite launches builds
@@ -17,6 +19,28 @@ class Buildkite(commands.Cog):
     @commands.has_role("Project Director")
     async def buildkite(self, ctx):
         pass
+
+    @buildkite.command(name="build", help="force push a branch. example: mako lineage-20.0 experimental 123456 234567")
+    async def build(self, ctx, device: str, version: str, release_type: str = "nightly", *args):
+        data = {
+            "branch": "main",
+            "commit": "HEAD",
+            "message": f"{device} {datetime.today().strftime('%Y%m%d')}",
+            "env": {
+                "DEVICE": device,
+                "RELEASE_TYPE": release_type,
+                "TYPE": "userdebug",
+                "VERSION": version,
+                "BUILD_UUID": str(uuid.uuid4()).replace("-", ""),
+                "EXP_PICK_CHANGES": ' '.join(args),
+            }
+        }
+
+        resp = requests.post('https://api.buildkite.com/v2/organizations/lineageos/pipelines/android/builds', json=data, headers={"Authorization": f"Bearer {os.environ.get('BUILDKITE_TOKEN')}"})
+        if resp.status_code == 201:
+            await ctx.message.reply(f"started: {resp.json()['web_url']}")
+        else:
+            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
     @buildkite.command(name="forcepush", help="force push a branch. example: hudson#main https://github.com/lineageos/hudson#main")
     async def forcepush(self, ctx, dest: str, src: str):
