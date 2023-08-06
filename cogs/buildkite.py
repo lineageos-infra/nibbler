@@ -20,7 +20,7 @@ class Buildkite(commands.Cog):
     async def buildkite(self, ctx):
         pass
 
-    @buildkite.command(name="build", help="force push a branch. example: mako lineage-20.0 experimental 123456 234567")
+    @buildkite.command(name="build", help="build android. example: mako lineage-20.0 experimental 123456 234567")
     async def build(self, ctx, device: str, version: str, release_type: str = "nightly", *args):
         data = {
             "branch": "main",
