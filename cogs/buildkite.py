@@ -42,6 +42,33 @@ class Buildkite(commands.Cog):
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
+    @buildkite.command(name="crowdin", help="start crowdin build for a branch. example: lineage-20.0")
+    async def crowdin(self, ctx, version: str):
+        data = {
+            "branch": version,
+            "commit": "HEAD",
+            "message": f"Upload sources",
+            "env": {
+                "UPLOAD_SOURCES": "1",
+            }
+        }
+
+        resp = requests.post('https://api.buildkite.com/v2/organizations/lineageos/pipelines/crowdin/builds', json=data, headers={"Authorization": f"Bearer {os.environ.get('BUILDKITE_TOKEN')}"})
+        if resp.status_code == 201:
+            await ctx.message.reply(f"started: {resp.json()['web_url']}")
+        else:
+            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+            return
+
+        data["message"] = "Download new translations"
+        del data["env"]
+
+        resp = requests.post('https://api.buildkite.com/v2/organizations/lineageos/pipelines/crowdin/builds', json=data, headers={"Authorization": f"Bearer {os.environ.get('BUILDKITE_TOKEN')}"})
+        if resp.status_code == 201:
+            await ctx.message.reply(f"started: {resp.json()['web_url']}")
+        else:
+            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
     @buildkite.command(name="forcepush", help="force push a branch. example: hudson#main https://github.com/lineageos/hudson#main")
     async def forcepush(self, ctx, dest: str, src: str):
         repo, branch = dest.split("#")
