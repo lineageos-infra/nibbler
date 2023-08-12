@@ -14,7 +14,7 @@ class Util(commands.Cog):
 
     @commands.command(help="echo raw text")
     async def echo(self, ctx):
-        await ctx.reply(f"```{ctx.message}```")
+        await ctx.reply(f"```{ctx.message}\n{ctx.message.content}```")
 
 
 async def setup(bot):
