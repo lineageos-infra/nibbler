@@ -8,10 +8,6 @@ class Roles(commands.Cog):
     '''
     def __init__(self, bot):
         self.bot = bot
-        self.update_task.start()
-
-    def cog_unload(self):
-        self.update_task.cancel()
 
     @commands.Cog.listener()
     async def on_ready(self):
