@@ -11,5 +11,13 @@ kill_timeout = "5s"
 [env]
   PYTHONUNBUFFERED = "true"
   REDIS_DB = "0"
-  REDIS_HOST = "lineageos-redis.internal"
+  REDIS_HOST = "localhost"
   REDIS_PORT = "6379"
+
+[[mounts]]
+  destination = "/data"
+  source = "redis"
+
+[metrics]
+  port = 9091
+  path = "/metrics"
