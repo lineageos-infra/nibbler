@@ -77,5 +77,14 @@ class Buildkite(commands.Cog):
             await ctx.message.reply(f"started: {resp.json()['web_url']}")
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+    @buildkite.command(name="remove", help="remove a build from the mirror. example: remove mako 20230714")
+    async def remove(self, ctx, device: str, date: str):
+        data = {'branch': 'main', 'commit': 'HEAD', 'env': {'DEVICE': device, 'DATE': date}, 'message': f'removal of {device} {date} by {ctx.message.author.name}'}
+        resp = requests.post('https://api.buildkite.com/v2/organizations/lineageos/pipelines/mirror-remove/builds', json=data, headers={"Authorization": f"Bearer {os.environ.get('BUILDKITE_TOKEN')}"})
+        if resp.status_code == 201:
+            await ctx.message.reply(f"started: {resp.json()['web_url']}")
+        else:
+            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
 async def setup(bot):
     await bot.add_cog(Buildkite(bot))
