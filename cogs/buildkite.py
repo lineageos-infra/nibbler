@@ -15,7 +15,7 @@ class Buildkite(commands.Cog):
     async def on_ready(self):
         print(f"Loaded {__name__}")
 
-    @commands.group(help="manage buildkite jobs", aliases=["build"])
+    @commands.group(help="manage buildkite jobs")
     @commands.has_role("Project Director")
     async def buildkite(self, ctx):
         pass
@@ -41,6 +41,11 @@ class Buildkite(commands.Cog):
             await ctx.message.reply(f"started: {resp.json()['web_url']}")
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
+    @commands.has_role("Project Director")
+    @commands.command(name="build", help="build android. example: mako lineage-20.0 experimental 123456 234567")
+    async def _build(self, ctx, device: str, version: str, release_type: str = "nightly", *args):
+        await self.build(ctx, device, version, release_type, *args)
 
     @buildkite.command(name="crowdin", help="start crowdin build for a branch. example: lineage-20.0")
     async def crowdin(self, ctx, version: str):
