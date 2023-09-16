@@ -15,7 +15,7 @@ class Buildkite(commands.Cog):
     async def on_ready(self):
         print(f"Loaded {__name__}")
 
-    @commands.group(help="manage buildkite jobs")
+    @commands.group(help="manage buildkite jobs", aliases=["build"])
     @commands.has_role("Project Director")
     async def buildkite(self, ctx):
         pass
