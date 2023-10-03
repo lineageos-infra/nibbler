@@ -1,5 +1,5 @@
 aiofiles==0.8.0
-aiohttp==3.7.4.post0
+aiohttp==3.8.5
 aiosqlite==0.17.0
 async-generator==1.10
 async-timeout==3.0.1
