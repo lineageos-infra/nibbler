@@ -25,7 +25,7 @@ class Bot(commands.Bot):
             self.get_cog(cog).redis = self.get_cog("Redis").redis
 
 
-bot = Bot(command_prefix="!", intents=discord.Intents.all())
+bot = Bot(command_prefix="!", allowed_mentions=discord.AllowedMentions.none(), intents=discord.Intents.all())
 
 @bot.event
 async def on_ready():
