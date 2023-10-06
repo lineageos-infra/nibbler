@@ -5,6 +5,7 @@ import requests
 
 
 class Garbage(commands.Cog):
+    IRC_CATEGORY_ID = 628008281121751070
     MACROS = {
         "acronym": "Lineage, or lineage. Not LOS or LAOS or LAOD.",
         "ask": "Yes - you can ask questions here - you just did! Please get to the point, we don't have all day.",
@@ -61,6 +62,9 @@ class Garbage(commands.Cog):
     @commands.command(hidden=True)
     async def when(self, ctx, *devices):
         reply = []
+
+        if ctx.channel.category_id == self.IRC_CATEGORY_ID:
+            devices = devices[:1]
 
         for device in devices:
             try:
