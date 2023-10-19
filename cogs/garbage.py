@@ -67,12 +67,7 @@ class Garbage(commands.Cog):
             devices = devices[:1]
 
         for device in devices:
-            try:
-                random.seed(device, version=1)
-            except:
-                random.seed(device)
-
-            dw = int(random.random() * 7) + 1
+            dw = random.Random(device).randint(1, 7)
 
             date = datetime.today()
             while dw != date.isoweekday():
