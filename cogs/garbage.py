@@ -26,7 +26,7 @@ class Garbage(commands.Cog):
         "stable": "A stable is where horses are kept. Lineage automatic builds are done on a !weekly basis",
         "unofficial": "This channel is for help with official roms obtained from https://download.lineageos.org/. Unofficial roms are not made by LineageOS, thus can be very different. Please seek support for unofficial roms from where you got it.",
         "watcannon": "https://64.media.tumblr.com/d655daf4856de7e1a45d4a180ad3d5ea/tumblr_muv69e0RvZ1shlw0so1_500.gif",
-        "weekly": "LineageOS 15.1 is built on a weekly basis (not nightly). The nightly version string is historical. https://github.com/LineageOS/hudson/blob/master/lineage-build-targets",
+        "weekly": "LineageOS 15.1 is built on a weekly basis (not nightly). The nightly version string is historical. <https://github.com/LineageOS/hudson/blob/master/lineage-build-targets>",
         "what": "https://tenor.com/view/goat-scary-animal-crazy-animal-scary-goat-wtf-gif-5548755",
         "why": "Because, that's why.",
         "yw": "You're welcome",
