@@ -30,7 +30,7 @@ class Roles(commands.Cog):
                 if not role in user.roles:
                     await user.add_roles(role)
 
-    @commands.group(help="commands related to hardware private channels")
+    @commands.group(help="commands related to hardware private channels", hidden=True)
     async def private(self, ctx):
         pass
 
