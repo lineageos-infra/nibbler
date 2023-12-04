@@ -23,7 +23,7 @@ class Buildkite(commands.Cog):
     @buildkite.command(name="build", help="build android. example: mako lineage-20.0 experimental 123456 234567")
     async def build(self, ctx, device: str, version: str, release_type: str = "nightly", *args):
         data = {
-            "branch": "main",
+            "branch": version,
             "commit": "HEAD",
             "message": f"{device} {datetime.today().strftime('%Y%m%d')}",
             "env": {
