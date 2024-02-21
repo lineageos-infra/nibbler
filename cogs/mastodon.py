@@ -74,6 +74,29 @@ class Mastodon(commands.Cog):
         else:
             print(req.status_code, req.text)
 
+    @commands.group()
+    @commands.has_role("Project Director")
+    async def mastodon(self, ctx):
+        pass
+
+    @mastodon.command()
+    @commands.has_role("Project Director")
+    async def post(self, ctx, *, text):
+        req = requests.post(
+            url=f"{os.environ.get('MASTODON_BASE_URL')}/api/v1/statuses",
+            data={
+                "status": text,
+            },
+            headers=self.headers,
+            timeout=5,
+        )
+
+        if req.status_code == 200:
+            await ctx.message.add_reaction("👍")
+        else:
+            await ctx.message.add_reaction("❌")
+            await ctx.reply(f"```{req.text}```")
+
 
 async def setup(bot):
     await bot.add_cog(Mastodon(bot))
