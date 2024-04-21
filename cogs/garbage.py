@@ -9,6 +9,7 @@ class Garbage(commands.Cog):
     MACROS = {
         "acronym": "Lineage, or lineage. Not LOS or LAOS or LAOD.",
         "ask": "Yes - you can ask questions here - you just did! Please get to the point, we don't have all day.",
+        "bridge": "Discord is bridged with #lineageos IRC channels over at https://libera.chat, feel free to read the FAQ over there if you don't know what IRC is.",
         "bugs": "https://wiki.lineageos.org/bugreport-howto.html",
         "devices": "Supported devices list: https://wiki.lineageos.org/devices/. Requests for additions can be made at https://undocumented.software/device_request/",
         "eta": "Please don't ask for ETAs. We don't provide them.",
