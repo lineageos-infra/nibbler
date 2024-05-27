@@ -47,8 +47,8 @@ class Garbage(commands.Cog):
 
     @commands.command(hidden=True)
     async def catfact(self, ctx):
-        req = requests.get("https://itvends.com/catfacts.php?format=text")
-        await ctx.send(req.text)
+        req = requests.get("https://raw.githubusercontent.com/itvends/web/master/itvends.com/catfacts.txt")
+        await ctx.send(random.choice(req.text.splitlines()))
 
     @commands.command(hidden=True)
     async def vend(self, ctx):
