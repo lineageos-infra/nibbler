@@ -51,6 +51,17 @@ class Garbage(commands.Cog):
         await ctx.send(random.choice(req.text.splitlines()))
 
     @commands.command(hidden=True)
+    async def dogfact(self, ctx):
+        req = requests.get("https://raw.githubusercontent.com/itvends/web/master/itvends.com/catfacts.txt")
+        facts = req.text \
+            .replace("cat", "dog") \
+            .replace("Cat", "Dog") \
+            .replace("kittens", "puppies") \
+            .replace("kitten", "puppy") \
+            .splitlines()
+        await ctx.send(random.choice(facts))
+
+    @commands.command(hidden=True)
     async def vend(self, ctx):
         req = requests.get("https://itvends.com/vend.php?format=text")
         await ctx.send(f"_vends {req.text}_")
