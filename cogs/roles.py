@@ -19,7 +19,7 @@ class Roles(commands.Cog):
         role = discord.utils.get(ctx.guild.roles, name="Maintainer")
         users = []
         for arg in args:
-            u = discord.utils.get(ctx.guild.members, name=arg)
+            u = next((x for x in ctx.guild.members if x.name.casefold() == arg.casefold()), None)
             if u:
                 users.append(u)
             else:
@@ -65,7 +65,7 @@ class Roles(commands.Cog):
         if not discord.utils.get(ctx.author.roles, name=ctx.channel.name):
             await ctx.reply("You don't have permission to do this.")
             return
-        who = discord.utils.get(ctx.guild.members, name=user)
+        who = next((x for x in ctx.guild.members if x.name.casefold() == user.casefold()), None)
         if not who:
             await ctx.reply("This user doesn't exist in this server. note: this _must_ be their global username, not their nick")
             return
@@ -81,7 +81,7 @@ class Roles(commands.Cog):
         if not discord.utils.get(ctx.author.roles, name=ctx.channel.name):
             await ctx.reply("You don't have permission to do this.")
             return
-        who = discord.utils.get(ctx.guild.members, name=user)
+        who = next((x for x in ctx.guild.members if x.name.casefold() == user.casefold()), None)
         if not who:
             await ctx.reply("This user doesn't exist in this server. note: this _must_ be their global username, not their nick")
             return
