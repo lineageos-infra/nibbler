@@ -23,7 +23,7 @@ class OxygenUpdater(commands.Cog):
     @commands.command(hidden=True)
     async def ou(self, ctx, device=None, update_method="2", incremental_system_version=""):
         if device == None:
-            req = requests.get("https://oxygenupdater.com/api/v2.6/devices", headers=self.HEADERS).json()
+            req = requests.get("https://oxygenupdater.com/api/v2.6/devices/all", headers=self.HEADERS).json()
             if "error" in req:
                 await self.reply_and_delete(ctx, f"```\n{json.dumps(req, indent=4)}\n```")
                 return
