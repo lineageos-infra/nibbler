@@ -20,17 +20,21 @@ class Buildkite(commands.Cog):
     async def buildkite(self, ctx):
         pass
 
-    @buildkite.command(name="build", help="build android. example: mako lineage-20.0 experimental 123456 234567")
+    @buildkite.command(name="build", help="build android. example: mako lineage-20.0,build1 experimental 123456 234567")
     async def build(self, ctx, device: str, version: str, release_type: str = "nightly", *args):
+        tags = version.split(",")
+        branch = tags[0]
+        host = tags[1] if len(tags) > 1 else ""
         data = {
-            "branch": version,
+            "branch": branch,
             "commit": "HEAD",
             "message": f"{device} {datetime.today().strftime('%Y%m%d')}",
             "env": {
                 "DEVICE": device,
+                "HOST": host,
                 "RELEASE_TYPE": release_type,
                 "TYPE": "userdebug",
-                "VERSION": version,
+                "VERSION": branch,
                 "BUILD_UUID": str(uuid.uuid4()).replace("-", ""),
                 "EXP_PICK_CHANGES": ' '.join(args),
             }
