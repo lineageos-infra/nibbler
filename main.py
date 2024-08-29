@@ -13,8 +13,14 @@ class Bot(commands.Bot):
 
     @staticmethod
     def has_any_role(ctx):
-        # is in guild, has author, and has some role besides @everyone
-        return ctx.guild and ctx.author and len(ctx.author.roles) > 1
+        # is in guild, has author, and has some role besides public ones
+        public_roles = [
+            "@everyone",
+            "europe",
+            "americas",
+            "asia-australia",
+        ]
+        return ctx.guild and ctx.author and any([x.name not in public_roles for x in ctx.author.roles])
 
     async def setup_hook(self):
         for cog in os.listdir("./cogs"):
