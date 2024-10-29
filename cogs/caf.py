@@ -20,7 +20,7 @@ class CAF(commands.Cog):
     async def on_ready(self):
         print(f"Loaded {__name__}")
 
-    @tasks.loop(seconds=30)
+    @tasks.loop(hours=1)
     async def fetch_tags(self):
         if len(self.bot.guilds) == 0:
             return
