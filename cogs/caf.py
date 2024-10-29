@@ -108,11 +108,6 @@ class CAF(commands.Cog):
 
         await ctx.reply(file=discord.File(io.StringIO("\n".join(response)), filename="tracked.txt"))
 
-    @caf.command()
-    @commands.has_role("Project Director")
-    async def flush(self, ctx):
-        await ctx.message.delete()
-
 
 async def setup(bot):
     await bot.add_cog(CAF(bot))
