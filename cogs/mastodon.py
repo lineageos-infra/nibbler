@@ -30,6 +30,7 @@ class Mastodon(commands.Cog):
             channel = self.redis.hget("config", "mastodon.channel")
             if not channel:
                 print("Please !config hset config mastodon.channel #channel")
+                return
             channel_id = channel.decode("utf-8")[2:-1]
             self.channel = discord.utils.get(
                 self.bot.guilds[0].channels, id=int(channel_id)
