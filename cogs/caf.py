@@ -110,10 +110,10 @@ class CAF(commands.Cog):
     async def tracked(self, ctx):
         response = []
 
-        for key, value in self._tracked().items():
-            response.append(f"{key} {value['url']} {value['prefix']} {value['tag']}")
+        for value in self._tracked().values():
+            response.append(f"{value['url']} {value['prefix']} {value['tag']}")
 
-        await ctx.reply(file=discord.File(io.StringIO("\n".join(response)), filename="tracked.txt"))
+        await ctx.reply(file=discord.File(io.StringIO("\n".join(sorted(response))), filename="tracked.txt"))
 
 
 async def setup(bot):
