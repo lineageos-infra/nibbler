@@ -36,18 +36,19 @@ class CAF(commands.Cog):
             )
 
         for key, value in self._tracked().items():
-            tags = self._get_tags(key)
-            new_tag = next((x for x in tags if x.startswith(value['prefix'])), None)
+            tags = self._get_tags(value["url"])
+            new_tag = next((x for x in tags if x.startswith(value["prefix"])), None)
 
             if value["tag"] == new_tag:
                 continue
 
-            embed = discord.Embed(title="New tag spotted", url=f"{key}/-/tree/{new_tag}")
+            embed = discord.Embed(title="New tag spotted", url=f"{value['url']}/-/tree/{new_tag}")
             embed.add_field(name="Tag", value=new_tag, inline=False)
-            embed.add_field(name="URL", value=key, inline=False)
+            embed.add_field(name="URL", value=value['url'], inline=False)
             await self.channel.send(embed=embed)
 
-            self.redis.hset("caf-fetch:tracked", key, json.dumps({
+            self.redis.lset("caf-fetch:tracked", key, json.dumps({
+                "url": value["url"],
                 "prefix": value["prefix"],
                 "tag": new_tag
             }))
@@ -76,8 +77,8 @@ class CAF(commands.Cog):
     def _tracked(self):
         tracked = {}
 
-        for key, value in self.redis.hscan_iter('caf-fetch:tracked'):
-            tracked[key.decode()] = json.loads(value)
+        for key, value in enumerate(self.redis.lrange("caf-fetch:tracked", 0, -1)):
+            tracked[key] = json.loads(value)
 
         return tracked
 
@@ -85,7 +86,8 @@ class CAF(commands.Cog):
     @commands.has_role("Project Director")
     async def track(self, ctx, url, prefix):
         assert url.startswith(self.CLO_URL_PREFIX), "Invalid URL"
-        self.redis.hset("caf-fetch:tracked", url, json.dumps({
+        self.redis.lpush("caf-fetch:tracked", json.dumps({
+            "url": url,
             "prefix": prefix,
             "tag": None
         }))
@@ -94,8 +96,13 @@ class CAF(commands.Cog):
 
     @caf.command()
     @commands.has_role("Project Director")
-    async def untrack(self, ctx, url):
-        self.redis.hdel("caf-fetch:tracked", url)
+    async def untrack(self, ctx, url, prefix=None):
+        for key, value in self._tracked().items():
+            if value["url"] != url:
+                continue
+            if prefix and value["prefix"] != prefix:
+                continue
+            self.redis.lrem("caf-fetch:tracked", 0, json.dumps(value))
         await ctx.message.add_reaction("👍")
 
     @caf.command()
@@ -104,7 +111,7 @@ class CAF(commands.Cog):
         response = []
 
         for key, value in self._tracked().items():
-            response.append(f"{key} {value['prefix']} {value['tag']}")
+            response.append(f"{key} {value['url']} {value['prefix']} {value['tag']}")
 
         await ctx.reply(file=discord.File(io.StringIO("\n".join(response)), filename="tracked.txt"))
 
