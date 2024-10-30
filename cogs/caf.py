@@ -43,16 +43,13 @@ class CAF(commands.Cog):
             if value["tag"] == new_tag:
                 continue
 
+            value["tag"] = new_tag
+            self.redis.hset("caf-fetch:tracked", key, json.dumps(value))
+
             embed = discord.Embed(title="New tag spotted", url=f"{value['url']}/-/tree/{new_tag}")
-            embed.add_field(name="Tag", value=new_tag, inline=False)
+            embed.add_field(name="Tag", value=value["tag"], inline=False)
             embed.add_field(name="URL", value=value["url"], inline=False)
             await self.channel.send(embed=embed)
-
-            self.redis.hset("caf-fetch:tracked", key, json.dumps({
-                "url": value["url"],
-                "prefix": value["prefix"],
-                "tag": new_tag
-            }))
 
     @commands.group()
     @commands.has_role("Project Director")
