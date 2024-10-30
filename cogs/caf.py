@@ -44,7 +44,7 @@ class CAF(commands.Cog):
 
             embed = discord.Embed(title="New tag spotted", url=f"{value['url']}/-/tree/{new_tag}")
             embed.add_field(name="Tag", value=new_tag, inline=False)
-            embed.add_field(name="URL", value=value['url'], inline=False)
+            embed.add_field(name="URL", value=value["url"], inline=False)
             await self.channel.send(embed=embed)
 
             self.redis.lset("caf-fetch:tracked", key, json.dumps({
