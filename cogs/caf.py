@@ -1,6 +1,7 @@
 import io
 import json
 import subprocess
+import uuid
 
 import discord
 from discord.ext import commands, tasks
@@ -47,7 +48,7 @@ class CAF(commands.Cog):
             embed.add_field(name="URL", value=value["url"], inline=False)
             await self.channel.send(embed=embed)
 
-            self.redis.lset("caf-fetch:tracked", key, json.dumps({
+            self.redis.hset("caf-fetch:tracked", key, json.dumps({
                 "url": value["url"],
                 "prefix": value["prefix"],
                 "tag": new_tag
@@ -77,8 +78,8 @@ class CAF(commands.Cog):
     def _tracked(self):
         tracked = {}
 
-        for key, value in enumerate(self.redis.lrange("caf-fetch:tracked", 0, -1)):
-            tracked[key] = json.loads(value)
+        for key, value in self.redis.hscan_iter("caf-fetch:tracked"):
+            tracked[key.decode()] = json.loads(value)
 
         return tracked
 
@@ -86,7 +87,7 @@ class CAF(commands.Cog):
     @commands.has_role("Project Director")
     async def track(self, ctx, url, prefix):
         assert url.startswith(self.CLO_URL_PREFIX), "Invalid URL"
-        self.redis.lpush("caf-fetch:tracked", json.dumps({
+        self.redis.hset("caf-fetch:tracked", str(uuid.uuid4()), json.dumps({
             "url": url,
             "prefix": prefix,
             "tag": None
@@ -102,7 +103,7 @@ class CAF(commands.Cog):
                 continue
             if prefix and value["prefix"] != prefix:
                 continue
-            self.redis.lrem("caf-fetch:tracked", 0, json.dumps(value))
+            self.redis.hdel("caf-fetch:tracked", key)
         await ctx.message.add_reaction("👍")
 
     @caf.command()
@@ -110,7 +111,7 @@ class CAF(commands.Cog):
     async def tracked(self, ctx):
         response = []
 
-        for value in self._tracked().values():
+        for _, value in self._tracked().items():
             response.append(f"{value['url']} {value['prefix']} {value['tag']}")
 
         await ctx.reply(file=discord.File(io.StringIO("\n".join(sorted(response))), filename="tracked.txt"))
