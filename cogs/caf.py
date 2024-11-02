@@ -40,7 +40,7 @@ class CAF(commands.Cog):
             tags = self._get_tags(value["url"])
             new_tag = next((x for x in tags if x.startswith(value["prefix"])), None)
 
-            if value["tag"] == new_tag:
+            if not new_tag or value["tag"] == new_tag:
                 continue
 
             value["tag"] = new_tag
