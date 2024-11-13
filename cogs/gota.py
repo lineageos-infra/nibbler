@@ -58,21 +58,14 @@ class GoogleOTA(commands.Cog):
                              data=data.getvalue(),
                              headers=self.HEADERS)
 
-        checkin_response = checkin_generator_pb2.AndroidCheckinResponse()
-        checkin_response.ParseFromString(resp.content)
-
-        update_title = None
-        update_url = None
-
-        for entry in checkin_response.setting:
-            if entry.name == b'update_title':
-                update_title = entry.value.decode()
-            elif entry.name == b'update_url':
-                update_url = entry.value.decode()
+        checkin_response = checkin_generator_pb2.AndroidCheckinResponse.FromString(resp.content)
+        setting = {entry.name: entry.value for entry in checkin_response.setting}
+        update_title = setting.get(b'update_title', b'')
+        update_url = setting.get(b'update_url', b'')
 
         if update_title and update_url:
-            embed = discord.Embed(title=update_title)
-            embed.add_field(name="URL", value=update_url, inline=False)
+            embed = discord.Embed(title=update_title.decode())
+            embed.add_field(name="URL", value=update_url.decode(), inline=False)
             await self.reply_and_delete(ctx, content=None, embed=embed)
         else:
             await self.reply_and_delete(ctx, content='Not found :(')
