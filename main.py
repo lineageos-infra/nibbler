@@ -1,8 +1,16 @@
-import asyncio
 import os
+import subprocess
+from glob import glob
 
 import discord
 from discord.ext import commands
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
+for name in glob(f"{dir_path}/proto/*.proto"):
+    subprocess.run(
+        ["protoc", "--proto_path=./proto", "--python_out=./proto", os.path.basename(name)],
+        cwd=dir_path)
 
 class Bot(commands.Bot):
     def __init__(self, command_prefix, *, intents, **options):
