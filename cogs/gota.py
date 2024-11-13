@@ -60,11 +60,12 @@ class GoogleOTA(commands.Cog):
 
         checkin_response = checkin_generator_pb2.AndroidCheckinResponse.FromString(resp.content)
         setting = {entry.name: entry.value for entry in checkin_response.setting}
+        update_description = setting.get(b'update_description', b'')
         update_title = setting.get(b'update_title', b'')
         update_url = setting.get(b'update_url', b'')
 
-        if update_title and update_url:
-            embed = discord.Embed(title=update_title.decode())
+        if update_description and update_title and update_url:
+            embed = discord.Embed(title=update_title.decode(), description=update_description.decode()[:4096])
             embed.add_field(name="URL", value=update_url.decode(), inline=False)
             await self.reply_and_delete(ctx, content=None, embed=embed)
         else:
