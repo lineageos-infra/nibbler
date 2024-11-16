@@ -15,7 +15,7 @@ class Cve(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        regex = ".*(CVE-\d{4}-\d{4,7}).*"
+        regex = r".*(CVE-\d{4}-\d{4,7}).*"
         if match := re.match(regex, message.content):
             r = requests.get("https://cve.circl.lu/api/cve/{}".format(match[1]))
             if r.status_code == 200:

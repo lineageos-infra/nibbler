@@ -18,7 +18,7 @@ class Gerrit(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        regex = "https://review\.lineageos\.org/(?:(?:#\/)?c\/(?:LineageOS\/[a-zA-Z_0-9\-]*\/\+\/)?)?(\d+)"
+        regex = r"https://review\.lineageos\.org/(?:(?:#\/)?c\/(?:LineageOS\/[a-zA-Z_0-9\-]*\/\+\/)?)?(\d+)"
         matches = set(re.findall(regex, re.sub("<.*?>", "", message.content)))
         if len(matches) > 3:
             return
