@@ -34,8 +34,11 @@ class Gerrit(commands.Cog):
                 url=f"https://review.lineageos.org/c/{change['_number']}",
                 colour=discord.Colour.green(),
             )
+            name = change["owner"]["name"]
+            if "email" in change["owner"]:
+                name += f" ({change['owner']['email']})"
             embed.set_author(
-                name=f'{change["owner"]["name"]} ({change["owner"]["email"]})',
+                name=name,
                 url=f'{self.gerrit_url}/q/owner:{change["owner"]["username"]}',
             )
             embed.add_field(
