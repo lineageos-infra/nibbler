@@ -30,6 +30,7 @@ class Garbage(commands.Cog):
         "weekly": "LineageOS is built on a weekly basis (not nightly). The nightly version string is historical. <https://github.com/LineageOS/hudson/blob/main/lineage-build-targets>",
         "what": "https://tenor.com/view/goat-scary-animal-crazy-animal-scary-goat-wtf-gif-5548755",
         "why": "Because, that's why.",
+        "winusb": "https://gist.github.com/luk1337/4bfab1d19ee472307f9077fba872d037",
         "yw": "You're welcome",
     }
 
