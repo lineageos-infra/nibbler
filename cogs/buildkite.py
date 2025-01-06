@@ -25,10 +25,13 @@ class Buildkite(commands.Cog):
         tags = version.split(",")
         branch = tags[0]
         host = tags[1] if len(tags) > 1 else ""
+        message = f"{device} {datetime.today().strftime('%Y%m%d')}"
+        if release_type == "experimental":
+            message = f":rotating_light: EXPERIMENTAL :rotating_light: {message}"
         data = {
             "branch": branch,
             "commit": "HEAD",
-            "message": f"{device} {datetime.today().strftime('%Y%m%d')}",
+            "message": message,
             "env": {
                 "DEVICE": device,
                 "HOST": host,
