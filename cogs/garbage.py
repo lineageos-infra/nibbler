@@ -14,6 +14,7 @@ class Garbage(commands.Cog):
         "devices": "Supported devices list: https://wiki.lineageos.org/devices/. Requests for additions can be made at https://undocumented.software/device_request/",
         "eta": "Please don't ask for ETAs. We don't provide them.",
         "faq": "See the FAQ here: https://wiki.lineageos.org/faq.html",
+        "frp": "https://gist.github.com/luk1337/fa47c87daa06b6bf7dfa24dde1e39350",
         "gapps": "https://wiki.lineageos.org/gapps.html",
         "how": "Stop asking questions you'll go blind.",
         "logcat": "Logcat: https://i.imgur.com/bSwnH7B.jpg. Follow this: https://wiki.lineageos.org/logcat.html and paste it to https://vomitb.in",
