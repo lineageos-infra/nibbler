@@ -54,6 +54,15 @@ class Buildkite(commands.Cog):
     async def _build(self, ctx, device: str, version: str, release_type: str = "nightly", *args):
         await self.build(ctx, device, version, release_type, *args)
 
+    @commands.has_role("Maintainer")
+    @buildkite.command(name="rebuild", help="rebuild 12345")
+    async def rebuild(self, ctx, id: str, *args):
+        resp = requests.post(f'https://api.buildkite.com/v2/organizations/lineageos/pipelines/android/builds/{id}/rebuild', json=data, headers={"Authorization": f"Bearer {os.environ.get('BUILDKITE_TOKEN')}"})
+        if resp.status_code == 201:
+            await ctx.message.reply(f"started: {resp.json()['web_url']}")
+        else:
+            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
     @commands.has_role("Project Director")
     @buildkite.command(name="crowdin", help="start crowdin build for a branch. example: lineage-20.0")
     async def crowdin(self, ctx, version: str):
