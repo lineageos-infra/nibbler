@@ -58,7 +58,7 @@ class Buildkite(commands.Cog):
     @buildkite.command(name="rebuild", help="rebuild 12345")
     async def rebuild(self, ctx, id: str, *args):
         resp = requests.put(f'https://api.buildkite.com/v2/organizations/lineageos/pipelines/android/builds/{id}/rebuild', headers={"Authorization": f"Bearer {os.environ.get('BUILDKITE_TOKEN')}"})
-        if resp.status_code == 201:
+        if resp.status_code == 200:
             await ctx.message.reply(f"started: {resp.json()['web_url']}")
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
