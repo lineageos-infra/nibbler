@@ -16,10 +16,10 @@ class Buildkite(commands.Cog):
         print(f"Loaded {__name__}")
 
     @commands.group(help="manage buildkite jobs")
-    @commands.has_role("Project Director")
     async def buildkite(self, ctx):
         pass
 
+    @commands.has_role("Project Director")
     @buildkite.command(name="build", help="build android. example: mako lineage-20.0,build1 experimental 123456 234567")
     async def build(self, ctx, device: str, version: str, release_type: str = "nightly", *args):
         tags = version.split(",")
@@ -54,6 +54,7 @@ class Buildkite(commands.Cog):
     async def _build(self, ctx, device: str, version: str, release_type: str = "nightly", *args):
         await self.build(ctx, device, version, release_type, *args)
 
+    @commands.has_role("Project Director")
     @buildkite.command(name="crowdin", help="start crowdin build for a branch. example: lineage-20.0")
     async def crowdin(self, ctx, version: str):
         data = {
@@ -81,6 +82,7 @@ class Buildkite(commands.Cog):
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
+    @commands.has_role("Project Director")
     @buildkite.command(name="forcepush", help="force push a branch. example: hudson main https://github.com/lineageos/hudson main")
     async def forcepush(self, ctx, repo: str, branch: str, src_repo: str, src_branch: str):
         data = {'branch': 'main', 'commit': 'HEAD', 'env': {'REPO': f'LineageOS/{repo}', 'DEST_BRANCH': branch, 'SRC_REPO': src_repo, 'SRC_BRANCH': src_branch}, 'message': f'forcepush of {repo} by {ctx.message.author.name}'}
@@ -89,6 +91,8 @@ class Buildkite(commands.Cog):
             await ctx.message.reply(f"started: {resp.json()['web_url']}")
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
+    @commands.has_role("Project Director")
     @buildkite.command(name="remove", help="remove a build from the mirror. example: remove mako 20230714")
     async def remove(self, ctx, device: str, date: str):
         data = {'branch': 'main', 'commit': 'HEAD', 'env': {'DEVICE': device, 'DATE': date}, 'message': f'removal of {device} {date} by {ctx.message.author.name}'}
