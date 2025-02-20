@@ -68,7 +68,7 @@ class Buildkite(commands.Cog):
     async def cancel(self, ctx, id: str, *args):
         resp = requests.put(f'https://api.buildkite.com/v2/organizations/lineageos/pipelines/android/builds/{id}/cancel', headers={"Authorization": f"Bearer {os.environ.get('BUILDKITE_TOKEN')}"})
         if resp.status_code == 200:
-            await ctx.message.add_reaction("✅")
+            await ctx.message.reply(f"canceled: {resp.json()['web_url']}")
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
