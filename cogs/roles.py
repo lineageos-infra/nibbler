@@ -15,20 +15,10 @@ class Roles(commands.Cog):
 
     @commands.command(help="Add maintainers via their global user name")
     @commands.has_role("Project Director")
-    async def maintainer(self, ctx, *args):
+    async def maintainer(self, ctx, user: discord.Member):
         role = discord.utils.get(ctx.guild.roles, name="Maintainer")
-        users = []
-        for arg in args:
-            u = next((x for x in ctx.guild.members if x.name.casefold() == arg.casefold()), None)
-            if u:
-                users.append(u)
-            else:
-                await ctx.reply(f"User \"{arg}\" doesn't exist in this server. note: this _must_ be their global username, not their nick.")
-        if users:
-            await ctx.message.add_reaction("✅")
-            for user in users:
-                if not role in user.roles:
-                    await user.add_roles(role)
+        await user.add_roles(role)
+        await ctx.message.add_reaction("✅")
 
     @commands.group(help="commands related to hardware private channels", hidden=True)
     async def private(self, ctx):
@@ -61,35 +51,27 @@ class Roles(commands.Cog):
         await ctx.message.add_reaction("👍")
 
     @private.command(name="add", help="Add a user to the current room.")
-    async def add_private(self, ctx, user):
+    async def add_private(self, ctx, user: discord.Member):
         if not discord.utils.get(ctx.author.roles, name=ctx.channel.name):
             await ctx.reply("You don't have permission to do this.")
-            return
-        who = next((x for x in ctx.guild.members if x.name.casefold() == user.casefold()), None)
-        if not who:
-            await ctx.reply("This user doesn't exist in this server. note: this _must_ be their global username, not their nick")
             return
         role = discord.utils.get(ctx.guild.roles, name=ctx.channel.name)
         if not role:
             await ctx.reply("This isn't a private enough channel!")
             return
-        await who.add_roles(role)
+        await user.add_roles(role)
         await ctx.message.add_reaction("👍")
 
     @private.command(help="kick a user from the current room.")
-    async def kick(self, ctx, user):
+    async def kick(self, ctx, user: discord.Member):
         if not discord.utils.get(ctx.author.roles, name=ctx.channel.name):
             await ctx.reply("You don't have permission to do this.")
-            return
-        who = next((x for x in ctx.guild.members if x.name.casefold() == user.casefold()), None)
-        if not who:
-            await ctx.reply("This user doesn't exist in this server. note: this _must_ be their global username, not their nick")
             return
         role = discord.utils.get(ctx.guild.roles, name=ctx.channel.name)
         if not role:
             await ctx.reply("This isn't a private enough channel!")
             return
-        await who.remove_roles(role)
+        await user.remove_roles(role)
         await ctx.message.add_reaction("👍")
 
     @private.command(help="Leave the current room.")
