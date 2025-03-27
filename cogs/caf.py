@@ -52,7 +52,7 @@ class CAF(commands.Cog):
             await self.channel.send(embed=embed)
 
     @commands.group()
-    @commands.has_role("Project Director")
+    @commands.has_role("Maintainer")
     async def caf(self, ctx):
         pass
 
@@ -81,7 +81,7 @@ class CAF(commands.Cog):
         return tracked
 
     @caf.command()
-    @commands.has_role("Project Director")
+    @commands.has_role("Maintainer")
     async def track(self, ctx, url, prefix):
         assert url.startswith(self.CLO_URL_PREFIX), "Invalid URL"
         self.redis.hset("caf-fetch:tracked", str(uuid.uuid4()), json.dumps({
@@ -93,7 +93,7 @@ class CAF(commands.Cog):
         await self.fetch_tags()
 
     @caf.command()
-    @commands.has_role("Project Director")
+    @commands.has_role("Maintainer")
     async def untrack(self, ctx, url, prefix=None):
         for key, value in self._tracked().items():
             if value["url"] != url:
@@ -104,7 +104,7 @@ class CAF(commands.Cog):
         await ctx.message.add_reaction("👍")
 
     @caf.command()
-    @commands.has_role("Project Director")
+    @commands.has_role("Maintainer")
     async def tracked(self, ctx):
         response = []
 
