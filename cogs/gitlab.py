@@ -49,7 +49,7 @@ class Gitlab(commands.Cog):
                 resp = requests.put(f"{self.ACCESS_REQUESTS_BASE_URL}/{request['id']}/approve",
                                     headers=self.GITLAB_HEADERS)
 
-                if resp.status_code != 200:
+                if resp.status_code != 201:
                     await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
                 else:
                     await ctx.message.add_reaction("👍")
@@ -66,7 +66,7 @@ class Gitlab(commands.Cog):
                 resp = requests.delete(f"{self.ACCESS_REQUESTS_BASE_URL}/{request['id']}",
                                        headers=self.GITLAB_HEADERS)
 
-                if resp.status_code != 200:
+                if resp.status_code != 204:
                     await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
                 else:
                     await ctx.message.add_reaction("👍")
