@@ -17,6 +17,7 @@ class Garbage(commands.Cog):
         "frp": "https://gist.github.com/luk1337/fa47c87daa06b6bf7dfa24dde1e39350",
         "gapps": "https://wiki.lineageos.org/gapps.html",
         "how": "Stop asking questions you'll go blind.",
+        "lfs": "https://gist.github.com/luk1337/a40bb0dbb09bf52e0f50a6f525fb858f",
         "logcat": "Logcat: https://i.imgur.com/bSwnH7B.jpg. Follow this: https://wiki.lineageos.org/logcat.html and paste it to https://vomitb.in",
         "steppum"[::-1]: "steppum/oi.buhtig.7331kul//:sptth"[::-1],
         "muricana": "https://tenor.com/view/american-eagle-usa-usa-flag-gif-14222446",
