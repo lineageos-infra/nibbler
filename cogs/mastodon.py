@@ -54,6 +54,9 @@ class Mastodon(commands.Cog):
                 if not last_notif or int(notif["id"]) > int(last_notif):
                     last_notif = notif["id"]
 
+                if notif["type"] != "mention":
+                    continue
+
                 soup = BeautifulSoup(notif["status"]["content"], features="html.parser")
                 embed = discord.Embed.from_dict(
                     {
