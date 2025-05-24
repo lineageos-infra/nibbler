@@ -59,7 +59,7 @@ class CAF(commands.Cog):
     @staticmethod
     def _get_tags(url):
         stdout = subprocess.run(
-            ["git", "ls-remote", "--refs", "--tags", url.replace("https://", "https://:@")],
+            ["timeout", "5", "git", "ls-remote", "--refs", "--tags", url.replace("https://", "https://:@")],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).stdout.decode()
