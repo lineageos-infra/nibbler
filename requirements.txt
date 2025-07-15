@@ -9,7 +9,7 @@ asyncio-extras==1.3.2
 asyncpraw==7.8.1
 asyncprawcore==2.4.0
 attrs==25.3.0
-audioop-lts==0.2.1
+audioop-lts==0.2.1; python_version>='3.13'
 beautifulsoup4==4.13.4
 black==25.1.0
 certifi==2025.7.14
