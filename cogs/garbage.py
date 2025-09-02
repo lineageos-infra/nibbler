@@ -14,6 +14,7 @@ class Garbage(commands.Cog):
         "devices": "Supported devices list: https://wiki.lineageos.org/devices/. Requests for additions can be made at https://undocumented.software/device_request/",
         "eta": "Please don't ask for ETAs. We don't provide them.",
         "faq": "See the FAQ here: https://wiki.lineageos.org/faq.html",
+        "firmware": "Please double check that you are following the firmware requirements for your device. If Lineage isn't installed from the correct stock firmware version, you may experience crashes, bugs or cause permanent damage to your device.",
         "frp": "https://gist.github.com/luk1337/fa47c87daa06b6bf7dfa24dde1e39350",
         "gapps": "https://wiki.lineageos.org/gapps.html",
         "how": "Stop asking questions you'll go blind.",
