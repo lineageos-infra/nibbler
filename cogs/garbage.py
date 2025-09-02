@@ -26,6 +26,7 @@ class Garbage(commands.Cog):
         "next": "Another satisfied customer. NEXT!",
         "nibble": "_OM NOM NOM_",
         "nightly": "LineageOS is built on a !weekly basis. The nightly version string is historical.",
+        "offtopic": "As intriguing as this conversation is, it is more offtopic than ontopic. Let's move to #lineageos-offtopic, and continue our witty banter there.",
         "roll": lambda: f"The answer is: {random.choices(['yes', 'no', 'maybe'], weights=[0.05, 0.65, 0.30])[0]}",
         "root": "We do not support or recommend, in any way, shape, or form, rooting a device. https://wiki.lineageos.org/faq#can-you-help-me-root-my-device",
         "snet": "https://wiki.lineageos.org/quirks/snet/",
