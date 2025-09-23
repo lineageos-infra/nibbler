@@ -77,7 +77,7 @@ class Buildkite(commands.Cog):
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
     @commands.has_role("Project Director")
-    @buildkite.command(name="crowdin", help="start crowdin build for a branch. example: lineage-20.0")
+    @commands.command(name="crowdin", help="start crowdin build for a branch. example: lineage-20.0")
     async def crowdin(self, ctx, version: str):
         data = {
             "branch": version,
