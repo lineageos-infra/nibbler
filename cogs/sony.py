@@ -33,7 +33,6 @@ class Sony(commands.Cog):
                 print('Please !config hset config sony.channel #channel')
                 return
             channel_id = channel.decode('utf-8')[2:-1]
-            print(channel_id)
             self.channel = discord.utils.get(
                 self.bot.guilds[0].channels, id=int(channel_id)
             )
@@ -42,7 +41,6 @@ class Sony(commands.Cog):
             new_version = self._get_version(
                 value['device'], value['customization']
             )
-            print(new_version)
 
             if not new_version or value['version'] == new_version:
                 continue
