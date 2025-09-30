@@ -1,5 +1,6 @@
 import os
 import textwrap
+from datetime import datetime
 
 import asyncpraw
 import discord
@@ -46,8 +47,10 @@ class Reddit(commands.Cog):
             self.subreddit = await self._r.subreddit('lineageos')
 
         try:
+            utc_now = datetime.now(datetime.timezone.utc).timestamp()
+
             async for post in self.subreddit.new(limit=10):
-                if post.id in self.done:
+                if post.id in self.done or utc_now - post.created_utc > 86400:
                     continue
                 embed = discord.Embed.from_dict(
                     {
