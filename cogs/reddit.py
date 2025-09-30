@@ -1,6 +1,5 @@
 import os
 import textwrap
-from datetime import datetime
 
 import asyncpraw
 import discord
@@ -33,10 +32,9 @@ class Reddit(commands.Cog):
                 self.bot.guilds[0].channels, id=int(channel_id)
             )
         if not hasattr(self, 'done'):
-            self.done = [
-                x.decode('utf-8')
-                for x in self.redis.lrange('reddit-fetch:done', 0, -1)
-            ]
+            self.newest_post = int(
+                self.redis.hget('reddit-fetch', 'newest_post') or 0
+            )
         if not hasattr(self, '_r'):
             self._r = asyncpraw.Reddit(
                 user_agent='LineageOS Discord Bot v1.0',
@@ -47,10 +45,11 @@ class Reddit(commands.Cog):
             self.subreddit = await self._r.subreddit('lineageos')
 
         try:
-            utc_now = datetime.now(datetime.timezone.utc).timestamp()
+            posts = [post async for post in self.subreddit.new(limit=10)][::-1]
 
-            async for post in self.subreddit.new(limit=10):
-                if post.id in self.done or utc_now - post.created_utc > 86400:
+            for post in posts:
+                post_id = int(post.id, 36)
+                if self.newest_post >= post_id:
                     continue
                 embed = discord.Embed.from_dict(
                     {
@@ -75,9 +74,8 @@ class Reddit(commands.Cog):
                     }
                 )
                 await self.channel.send(content=None, embed=embed)
-                self.redis.lpush('reddit-fetch:done', post.id)
-                self.redis.ltrim('reddit-fetch:done', 0, 99)
-                self.done = [post.id, *self.done[:99]]
+                self.redis.hset('reddit-fetch', 'newest_post', post_id)
+                self.newest_post = post_id
         except Exception as e:
             print(e)
 
