@@ -1,11 +1,12 @@
 import discord
-from discord.ext import tasks, commands
+from discord.ext import commands
 
 
 class Roles(commands.Cog):
-    '''Roles provides multiple funtions - this is where most of the permission related stuff for lineage lives.
+    """Roles provides multiple funtions - this is where most of the permission related stuff for lineage lives.
     - quickly add people to the maintainer role via !maintainer (mention or user)
-    '''
+    """
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -29,7 +30,7 @@ class Roles(commands.Cog):
     async def create(self, ctx, name):
         role = discord.utils.get(ctx.guild.roles, name=name)
 
-        category = discord.utils.get(ctx.guild.categories, name='private')
+        category = discord.utils.get(ctx.guild.categories, name="private")
         channel = discord.utils.get(ctx.guild.channels, name=name)
 
         if not role:
@@ -38,15 +39,19 @@ class Roles(commands.Cog):
         overwrites = {
             ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),
             ctx.guild.me: discord.PermissionOverwrite(read_messages=True),
-            role: discord.PermissionOverwrite(read_messages=True)
+            role: discord.PermissionOverwrite(read_messages=True),
         }
         if not category:
-            category = await ctx.guild.create_category_channel(name='private', overwrites=overwrites)
+            category = await ctx.guild.create_category_channel(
+                name="private", overwrites=overwrites
+            )
         else:
             await category.set_permissions(role, read_messages=True)
 
         if not channel or channel.category != category:
-            channel = await ctx.guild.create_text_channel(name=name, category=category, overwrites=overwrites)
+            channel = await ctx.guild.create_text_channel(
+                name=name, category=category, overwrites=overwrites
+            )
 
         await ctx.message.add_reaction("👍")
 
@@ -80,6 +85,7 @@ class Roles(commands.Cog):
         if role:
             await ctx.author.remove_roles(role)
         await ctx.message.add_reaction("👍")
+
 
 async def setup(bot):
     await bot.add_cog(Roles(bot))

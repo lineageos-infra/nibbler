@@ -11,7 +11,7 @@ class Gitlab(commands.Cog):
     ACCESS_REQUESTS_BASE_URL = f"{GITLAB_BASE_URL}/groups/{GROUP_ID}/access_requests"
 
     GITLAB_HEADERS = {
-        "PRIVATE-TOKEN": os.environ.get('GITLAB_TOKEN'),
+        "PRIVATE-TOKEN": os.environ.get("GITLAB_TOKEN"),
     }
 
     def __init__(self, bot):
@@ -26,7 +26,9 @@ class Gitlab(commands.Cog):
         pass
 
     def _access_requests(self):
-        return requests.get(self.ACCESS_REQUESTS_BASE_URL, headers=self.GITLAB_HEADERS).json()
+        return requests.get(
+            self.ACCESS_REQUESTS_BASE_URL, headers=self.GITLAB_HEADERS
+        ).json()
 
     @commands.has_role("Project Director")
     @gitlab.command(help="list access requests")
@@ -45,12 +47,14 @@ class Gitlab(commands.Cog):
     @gitlab.command(help="approve an access request")
     async def approve(self, ctx, username: str):
         for request in self._access_requests():
-            if request['username'] == username:
-                resp = requests.put(f"{self.ACCESS_REQUESTS_BASE_URL}/{request['id']}/approve",
-                                    headers=self.GITLAB_HEADERS)
+            if request["username"] == username:
+                resp = requests.put(
+                    f"{self.ACCESS_REQUESTS_BASE_URL}/{request['id']}/approve",
+                    headers=self.GITLAB_HEADERS,
+                )
 
                 if resp.status_code != 201:
-                    await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+                    await ctx.message.reply(f"failed: ```{resp.text[:1500]}```")
                 else:
                     await ctx.message.add_reaction("👍")
 
@@ -62,12 +66,14 @@ class Gitlab(commands.Cog):
     @gitlab.command(help="deny an access request")
     async def deny(self, ctx, username: str):
         for request in self._access_requests():
-            if request['username'] == username:
-                resp = requests.delete(f"{self.ACCESS_REQUESTS_BASE_URL}/{request['id']}",
-                                       headers=self.GITLAB_HEADERS)
+            if request["username"] == username:
+                resp = requests.delete(
+                    f"{self.ACCESS_REQUESTS_BASE_URL}/{request['id']}",
+                    headers=self.GITLAB_HEADERS,
+                )
 
                 if resp.status_code != 204:
-                    await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+                    await ctx.message.reply(f"failed: ```{resp.text[:1500]}```")
                 else:
                     await ctx.message.add_reaction("👍")
 

@@ -48,11 +48,20 @@ class Sony(commands.Cog):
             value["version"] = new_version
             self.redis.hset("sony-fetch:tracked", key, json.dumps(value))
 
-            embed = discord.Embed(title="New version spotted", url=f"{self.SONY_URL_PREFIX}/{value['device']}")
+            embed = discord.Embed(
+                title="New version spotted",
+                url=f"{self.SONY_URL_PREFIX}/{value['device']}",
+            )
             embed.add_field(name="Device", value=value["device"], inline=False)
-            embed.add_field(name="Customization", value=value["customization"], inline=False)
+            embed.add_field(
+                name="Customization", value=value["customization"], inline=False
+            )
             embed.add_field(name="Version", value=value["version"], inline=False)
-            embed.add_field(name="URL", value=f"{self.SONY_URL_PREFIX}/{value['device']}", inline=False)
+            embed.add_field(
+                name="URL",
+                value=f"{self.SONY_URL_PREFIX}/{value['device']}",
+                inline=False,
+            )
             await self.channel.send(embed=embed)
 
     @commands.group()
@@ -84,11 +93,13 @@ class Sony(commands.Cog):
     @sony.command()
     @commands.has_role("sony")
     async def track(self, ctx, device, customization):
-        self.redis.hset("sony-fetch:tracked", str(uuid.uuid4()), json.dumps({
-            "device": device,
-            "customization": customization,
-            "version": None
-        }))
+        self.redis.hset(
+            "sony-fetch:tracked",
+            str(uuid.uuid4()),
+            json.dumps(
+                {"device": device, "customization": customization, "version": None}
+            ),
+        )
         await ctx.message.add_reaction("👍")
         await self.fetch_versions()
 
@@ -109,9 +120,15 @@ class Sony(commands.Cog):
         response = []
 
         for _, value in self._tracked().items():
-            response.append(f"{value['url']} {value['device']} {value['customization']}")
+            response.append(
+                f"{value['url']} {value['device']} {value['customization']}"
+            )
 
-        await ctx.reply(file=discord.File(io.StringIO("\n".join(sorted(response))), filename="tracked.txt"))
+        await ctx.reply(
+            file=discord.File(
+                io.StringIO("\n".join(sorted(response))), filename="tracked.txt"
+            )
+        )
 
 
 async def setup(bot):

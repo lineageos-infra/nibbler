@@ -46,7 +46,9 @@ class CAF(commands.Cog):
             value["tag"] = new_tag
             self.redis.hset("caf-fetch:tracked", key, json.dumps(value))
 
-            embed = discord.Embed(title="New tag spotted", url=f"{value['url']}/-/tree/{value['tag']}")
+            embed = discord.Embed(
+                title="New tag spotted", url=f"{value['url']}/-/tree/{value['tag']}"
+            )
             embed.add_field(name="Tag", value=value["tag"], inline=False)
             embed.add_field(name="URL", value=value["url"], inline=False)
             await self.channel.send(embed=embed)
@@ -59,7 +61,15 @@ class CAF(commands.Cog):
     @staticmethod
     def _get_tags(url):
         stdout = subprocess.run(
-            ["timeout", "5", "git", "ls-remote", "--refs", "--tags", url.replace("https://", "https://:@")],
+            [
+                "timeout",
+                "5",
+                "git",
+                "ls-remote",
+                "--refs",
+                "--tags",
+                url.replace("https://", "https://:@"),
+            ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).stdout.decode()
@@ -84,11 +94,11 @@ class CAF(commands.Cog):
     @commands.has_role("Maintainer")
     async def track(self, ctx, url, prefix):
         assert url.startswith(self.CLO_URL_PREFIX), "Invalid URL"
-        self.redis.hset("caf-fetch:tracked", str(uuid.uuid4()), json.dumps({
-            "url": url,
-            "prefix": prefix,
-            "tag": None
-        }))
+        self.redis.hset(
+            "caf-fetch:tracked",
+            str(uuid.uuid4()),
+            json.dumps({"url": url, "prefix": prefix, "tag": None}),
+        )
         await ctx.message.add_reaction("👍")
         await self.fetch_tags()
 
@@ -111,7 +121,11 @@ class CAF(commands.Cog):
         for _, value in self._tracked().items():
             response.append(f"{value['url']} {value['prefix']} {value['tag']}")
 
-        await ctx.reply(file=discord.File(io.StringIO("\n".join(sorted(response))), filename="tracked.txt"))
+        await ctx.reply(
+            file=discord.File(
+                io.StringIO("\n".join(sorted(response))), filename="tracked.txt"
+            )
+        )
 
 
 async def setup(bot):

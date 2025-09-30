@@ -47,25 +47,32 @@ class Garbage(commands.Cog):
     async def on_ready(self):
         print(f"Loaded {__name__}")
 
-    @commands.command(hidden=True, name=list(MACROS.keys())[0], aliases=list(MACROS.keys())[1:])
+    @commands.command(
+        hidden=True, name=list(MACROS.keys())[0], aliases=list(MACROS.keys())[1:]
+    )
     async def _macro(self, ctx):
         value = self.MACROS[ctx.invoked_with]
         await ctx.send(value() if callable(value) else value)
 
     @commands.command(hidden=True)
     async def catfact(self, ctx):
-        req = requests.get("https://raw.githubusercontent.com/itvends/web/master/itvends.com/catfacts.txt")
+        req = requests.get(
+            "https://raw.githubusercontent.com/itvends/web/master/itvends.com/catfacts.txt"
+        )
         await ctx.send(random.choice(req.text.splitlines()))
 
     @commands.command(hidden=True)
     async def dogfact(self, ctx):
-        req = requests.get("https://raw.githubusercontent.com/itvends/web/master/itvends.com/catfacts.txt")
-        facts = req.text \
-            .replace("cat", "dog") \
-            .replace("Cat", "Dog") \
-            .replace("kittens", "puppies") \
-            .replace("kitten", "puppy") \
+        req = requests.get(
+            "https://raw.githubusercontent.com/itvends/web/master/itvends.com/catfacts.txt"
+        )
+        facts = (
+            req.text.replace("cat", "dog")
+            .replace("Cat", "Dog")
+            .replace("kittens", "puppies")
+            .replace("kitten", "puppy")
             .splitlines()
+        )
         await ctx.send(random.choice(facts))
 
     @commands.command(hidden=True)
@@ -94,8 +101,9 @@ class Garbage(commands.Cog):
 
             reply.append(str((device, date.strftime("%A, %Y-%m-%d"))))
 
-        if reply := '\n'.join(reply):
+        if reply := "\n".join(reply):
             await ctx.reply(reply)
+
 
 async def setup(bot):
     await bot.add_cog(Garbage(bot))

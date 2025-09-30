@@ -1,4 +1,4 @@
-from discord.ext import tasks, commands
+from discord.ext import commands
 
 import asyncio
 import discord
@@ -21,63 +21,95 @@ class OxygenUpdater(commands.Cog):
         print(f"Loaded {__name__}")
 
     @commands.command(hidden=True)
-    async def ou(self, ctx, device=None, update_method="2", incremental_system_version=""):
-        if device == None:
-            req = requests.get("https://oxygenupdater.com/api/v2.6/devices/all", headers=self.HEADERS).json()
+    async def ou(
+        self, ctx, device=None, update_method="2", incremental_system_version=""
+    ):
+        if device is None:
+            req = requests.get(
+                "https://oxygenupdater.com/api/v2.6/devices/all", headers=self.HEADERS
+            ).json()
             if "error" in req:
-                await self.reply_and_delete(ctx, f"```\n{json.dumps(req, indent=4)}\n```")
+                await self.reply_and_delete(
+                    ctx, f"```\n{json.dumps(req, indent=4)}\n```"
+                )
                 return
-            devices = { x["id"]: x["name"] for x in sorted(req, key=lambda d: int(d["id"])) }
-            await self.reply_and_delete(ctx, file=discord.File(io.StringIO(json.dumps(devices, indent=4)), filename="devices.txt"))
+            devices = {
+                x["id"]: x["name"] for x in sorted(req, key=lambda d: int(d["id"]))
+            }
+            await self.reply_and_delete(
+                ctx,
+                file=discord.File(
+                    io.StringIO(json.dumps(devices, indent=4)), filename="devices.txt"
+                ),
+            )
         elif update_method == "?":
-            req = requests.get(f"https://oxygenupdater.com/api/v2.6/updateMethods/{device}", headers=self.HEADERS).json()
+            req = requests.get(
+                f"https://oxygenupdater.com/api/v2.6/updateMethods/{device}",
+                headers=self.HEADERS,
+            ).json()
             if "error" in req:
-                await self.reply_and_delete(ctx, f"```\n{json.dumps(req, indent=4)}\n```")
+                await self.reply_and_delete(
+                    ctx, f"```\n{json.dumps(req, indent=4)}\n```"
+                )
                 return
-            update_methods = { x["id"]: x["english_name"] for x in sorted(req, key=lambda d: int(d["id"])) }
+            update_methods = {
+                x["id"]: x["english_name"]
+                for x in sorted(req, key=lambda d: int(d["id"]))
+            }
             if ctx.channel.category_id == self.IRC_CATEGORY_ID:
-                await self.reply_and_delete(ctx, file=discord.File(io.StringIO(json.dumps(update_methods, indent=4)), filename="updateMethods.txt"))
+                await self.reply_and_delete(
+                    ctx,
+                    file=discord.File(
+                        io.StringIO(json.dumps(update_methods, indent=4)),
+                        filename="updateMethods.txt",
+                    ),
+                )
             else:
-                await self.reply_and_delete(ctx, f"```\n{json.dumps(update_methods, indent=4)}\n```")
+                await self.reply_and_delete(
+                    ctx, f"```\n{json.dumps(update_methods, indent=4)}\n```"
+                )
         else:
             if len(incremental_system_version) > 0:
-                req = requests.get(f"https://oxygenupdater.com/api/v2.6/updateData/{device}/{update_method}/{incremental_system_version}", headers=self.HEADERS).json()
+                req = requests.get(
+                    f"https://oxygenupdater.com/api/v2.6/updateData/{device}/{update_method}/{incremental_system_version}",
+                    headers=self.HEADERS,
+                ).json()
             else:
-                req = requests.get(f"https://oxygenupdater.com/api/v2.6/mostRecentUpdateData/{device}/{update_method}", headers=self.HEADERS).json()
+                req = requests.get(
+                    f"https://oxygenupdater.com/api/v2.6/mostRecentUpdateData/{device}/{update_method}",
+                    headers=self.HEADERS,
+                ).json()
             if "error" in req or "information" in req:
-                await self.reply_and_delete(ctx, f"```\n{json.dumps(req, indent=4)}\n```")
+                await self.reply_and_delete(
+                    ctx, f"```\n{json.dumps(req, indent=4)}\n```"
+                )
                 return
-            embed = discord.Embed.from_dict({
-                "title": req["ota_version_number"],
-                "type": "rich",
-                "description": req["changelog"][:4096],
-                "url": req["download_url"],
-                "color": 15401000,
-                "thumbnail": {
-                    "url": "https://oxygenupdater.com/img/favicon/android-chrome-192x192.png"
-                },
-                "fields": [
-                    {
-                        "name": "MD5",
-                        "value": req["md5sum"],
-                        "inline": "true"
+            embed = discord.Embed.from_dict(
+                {
+                    "title": req["ota_version_number"],
+                    "type": "rich",
+                    "description": req["changelog"][:4096],
+                    "url": req["download_url"],
+                    "color": 15401000,
+                    "thumbnail": {
+                        "url": "https://oxygenupdater.com/img/favicon/android-chrome-192x192.png"
                     },
-                    {
-                        "name": "OS version",
-                        "value": req["description"].splitlines()[0].split()[-1],
-                        "inline": "true"
-                    },
-                    {
-                        "name": "Download size",
-                        "value": self.sizeof_fmt(int(req["download_size"])),
-                        "inline": "true"
-                    },
-                    {
-                        "name": "Download URL",
-                        "value": req["download_url"]
-                    }
-                ]
-            })
+                    "fields": [
+                        {"name": "MD5", "value": req["md5sum"], "inline": "true"},
+                        {
+                            "name": "OS version",
+                            "value": req["description"].splitlines()[0].split()[-1],
+                            "inline": "true",
+                        },
+                        {
+                            "name": "Download size",
+                            "value": self.sizeof_fmt(int(req["download_size"])),
+                            "inline": "true",
+                        },
+                        {"name": "Download URL", "value": req["download_url"]},
+                    ],
+                }
+            )
             await self.reply_and_delete(ctx, content=None, embed=embed)
 
     async def reply_and_delete(self, ctx, *args, **kwargs):
