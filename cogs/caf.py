@@ -8,6 +8,7 @@ from discord.ext import commands, tasks
 
 
 class CAF(commands.Cog):
+    CIP_URL = 'https://gitlab.com/cip-project/cip-kernel/linux-cip'
     CLO_URL_PREFIX = 'https://git.codelinaro.org/clo/la'
 
     def __init__(self, bot):
@@ -96,7 +97,9 @@ class CAF(commands.Cog):
     @caf.command()
     @commands.has_role('Maintainer')
     async def track(self, ctx, url, prefix):
-        assert url.startswith(self.CLO_URL_PREFIX), 'Invalid URL'
+        assert url == self.CIP_URL or url.startswith(self.CLO_URL_PREFIX), (
+            'Invalid URL'
+        )
         self.redis.hset(
             'caf-fetch:tracked',
             str(uuid.uuid4()),
