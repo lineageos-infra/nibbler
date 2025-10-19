@@ -23,54 +23,55 @@ class Buildkite(commands.Cog):
     @commands.has_role('Project Director')
     @buildkite.command(
         name='build',
-        help='build android. example: mako lineage-20.0#c856ad1,build1 experimental 123456 234567',
+        help='build android. example: mako,hammerhead lineage-20.0#c856ad1,build1 experimental 123456 234567',
     )
     async def build(
         self,
         ctx,
-        device: str,
+        devices: str,
         version: str,
         release_type: str = 'nightly',
         *args,
     ):
-        tags = version.split(',')
-        if '#' in tags[0]:
-            branch, commit = tags[0].split('#')
-        else:
-            branch = tags[0]
-            commit = 'HEAD'
-        host = tags[1] if len(tags) > 1 else ''
-        message = f'{device} {datetime.today().strftime("%Y%m%d")}'
-        if release_type == 'experimental':
-            message = (
-                f':rotating_light: EXPERIMENTAL :rotating_light: {message}'
-            )
-        data = {
-            'branch': branch,
-            'commit': commit,
-            'message': message,
-            'env': {
-                'DEVICE': device,
-                'HOST': host,
-                'RELEASE_TYPE': release_type,
-                'TYPE': 'userdebug',
-                'VERSION': branch,
-                'BUILD_UUID': str(uuid.uuid4()).replace('-', ''),
-                'EXP_PICK_CHANGES': ' '.join(args),
-            },
-        }
+        for device in devices.split(','):
+            tags = version.split(',')
+            if '#' in tags[0]:
+                branch, commit = tags[0].split('#')
+            else:
+                branch = tags[0]
+                commit = 'HEAD'
+            host = tags[1] if len(tags) > 1 else ''
+            message = f'{device} {datetime.today().strftime("%Y%m%d")}'
+            if release_type == 'experimental':
+                message = (
+                    f':rotating_light: EXPERIMENTAL :rotating_light: {message}'
+                )
+            data = {
+                'branch': branch,
+                'commit': commit,
+                'message': message,
+                'env': {
+                    'DEVICE': device,
+                    'HOST': host,
+                    'RELEASE_TYPE': release_type,
+                    'TYPE': 'userdebug',
+                    'VERSION': branch,
+                    'BUILD_UUID': str(uuid.uuid4()).replace('-', ''),
+                    'EXP_PICK_CHANGES': ' '.join(args),
+                },
+            }
 
-        resp = requests.post(
-            'https://api.buildkite.com/v2/organizations/lineageos/pipelines/android/builds',
-            json=data,
-            headers={
-                'Authorization': f'Bearer {os.environ.get("BUILDKITE_TOKEN")}'
-            },
-        )
-        if resp.status_code == 201:
-            await ctx.message.reply(f'started: {resp.json()["web_url"]}')
-        else:
-            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+            resp = requests.post(
+                'https://api.buildkite.com/v2/organizations/lineageos/pipelines/android/builds',
+                json=data,
+                headers={
+                    'Authorization': f'Bearer {os.environ.get("BUILDKITE_TOKEN")}'
+                },
+            )
+            if resp.status_code == 201:
+                await ctx.message.reply(f'started: {resp.json()["web_url"]}')
+            else:
+                await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
     @commands.has_role('Project Director')
     @commands.command(
