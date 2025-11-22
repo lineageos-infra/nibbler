@@ -265,7 +265,7 @@ class Buildkite(commands.Cog):
     async def mirror_list(self, ctx):
         await self._mirror_toggle(
             ctx,
-            {'ACTION': 'disable'},
+            {'ACTION': 'list'},
             f'Listing mirrors by {ctx.message.author.name}',
         )
 
