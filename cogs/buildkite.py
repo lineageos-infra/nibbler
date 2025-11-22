@@ -262,6 +262,30 @@ class Buildkite(commands.Cog):
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
+    @commands.has_role('Project Director')
+    @buildkite.command(
+        name='mirror-list',
+        help='list mirrors',
+    )
+    async def mirror_list(self, ctx):
+        data = {
+            'branch': 'main',
+            'commit': 'HEAD',
+            'env': {'MIRROR': '', 'ACTION': 'list'},
+            'message': f'Listing mirrors by {ctx.message.author.name}',
+        }
+        resp = requests.post(
+            'https://api.buildkite.com/v2/organizations/lineageos/pipelines/mirror-toggle/builds',
+            json=data,
+            headers={
+                'Authorization': f'Bearer {os.environ.get("BUILDKITE_TOKEN")}'
+            },
+        )
+        if resp.status_code == 201:
+            await ctx.message.reply(f'started: {resp.json()["web_url"]}')
+        else:
+            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
 
 async def setup(bot):
     await bot.add_cog(Buildkite(bot))
