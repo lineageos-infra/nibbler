@@ -214,6 +214,54 @@ class Buildkite(commands.Cog):
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
+    @commands.has_role('Project Director')
+    @buildkite.command(
+        name='mirror-enable',
+        help='enable given mirror. example: mirror-enable mirrors.dotsrc.org',
+    )
+    async def mirror_enable(self, ctx, mirror: str):
+        data = {
+            'branch': 'main',
+            'commit': 'HEAD',
+            'env': {'MIRROR': mirror, 'ACTION': 'enable'},
+            'message': f'Enabling {mirror} by {ctx.message.author.name}',
+        }
+        resp = requests.post(
+            'https://api.buildkite.com/v2/organizations/lineageos/pipelines/mirror-toggle/builds',
+            json=data,
+            headers={
+                'Authorization': f'Bearer {os.environ.get("BUILDKITE_TOKEN")}'
+            },
+        )
+        if resp.status_code == 201:
+            await ctx.message.reply(f'started: {resp.json()["web_url"]}')
+        else:
+            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
+    @commands.has_role('Project Director')
+    @buildkite.command(
+        name='mirror-disable',
+        help='disable given mirror. example: mirror-disable mirrors.dotsrc.org',
+    )
+    async def mirror_disable(self, ctx, mirror: str):
+        data = {
+            'branch': 'main',
+            'commit': 'HEAD',
+            'env': {'MIRROR': mirror, 'ACTION': 'disable'},
+            'message': f'Disabling {mirror} by {ctx.message.author.name}',
+        }
+        resp = requests.post(
+            'https://api.buildkite.com/v2/organizations/lineageos/pipelines/mirror-toggle/builds',
+            json=data,
+            headers={
+                'Authorization': f'Bearer {os.environ.get("BUILDKITE_TOKEN")}'
+            },
+        )
+        if resp.status_code == 201:
+            await ctx.message.reply(f'started: {resp.json()["web_url"]}')
+        else:
+            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
 
 async def setup(bot):
     await bot.add_cog(Buildkite(bot))
