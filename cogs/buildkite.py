@@ -214,17 +214,12 @@ class Buildkite(commands.Cog):
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
-    @commands.has_role('Project Director')
-    @buildkite.command(
-        name='mirror-enable',
-        help='enable given mirror. example: mirror-enable mirrors.dotsrc.org',
-    )
-    async def mirror_enable(self, ctx, mirror: str):
+    async def _mirror_toggle(self, ctx, env: dict, message: str):
         data = {
             'branch': 'main',
             'commit': 'HEAD',
-            'env': {'MIRROR': mirror, 'ACTION': 'enable'},
-            'message': f'Enabling {mirror} by {ctx.message.author.name}',
+            'env': env,
+            'message': message,
         }
         resp = requests.post(
             'https://api.buildkite.com/v2/organizations/lineageos/pipelines/mirror-toggle/builds',
@@ -237,6 +232,18 @@ class Buildkite(commands.Cog):
             await ctx.message.reply(f'started: {resp.json()["web_url"]}')
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
+    @commands.has_role('Project Director')
+    @buildkite.command(
+        name='mirror-enable',
+        help='enable given mirror. example: mirror-enable mirrors.dotsrc.org',
+    )
+    async def mirror_enable(self, ctx, mirror: str):
+        await self._mirror_toggle(
+            ctx,
+            {'ACTION': 'enable', 'MIRROR': mirror},
+            f'Enabling {mirror} by {ctx.message.author.name}',
+        )
 
     @commands.has_role('Project Director')
     @buildkite.command(
@@ -244,23 +251,11 @@ class Buildkite(commands.Cog):
         help='disable given mirror. example: mirror-disable mirrors.dotsrc.org',
     )
     async def mirror_disable(self, ctx, mirror: str):
-        data = {
-            'branch': 'main',
-            'commit': 'HEAD',
-            'env': {'MIRROR': mirror, 'ACTION': 'disable'},
-            'message': f'Disabling {mirror} by {ctx.message.author.name}',
-        }
-        resp = requests.post(
-            'https://api.buildkite.com/v2/organizations/lineageos/pipelines/mirror-toggle/builds',
-            json=data,
-            headers={
-                'Authorization': f'Bearer {os.environ.get("BUILDKITE_TOKEN")}'
-            },
+        await self._mirror_toggle(
+            ctx,
+            {'ACTION': 'disable', 'MIRROR': mirror},
+            f'Disabling {mirror} by {ctx.message.author.name}',
         )
-        if resp.status_code == 201:
-            await ctx.message.reply(f'started: {resp.json()["web_url"]}')
-        else:
-            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
     @commands.has_role('Project Director')
     @buildkite.command(
@@ -268,23 +263,11 @@ class Buildkite(commands.Cog):
         help='list mirrors',
     )
     async def mirror_list(self, ctx):
-        data = {
-            'branch': 'main',
-            'commit': 'HEAD',
-            'env': {'MIRROR': '', 'ACTION': 'list'},
-            'message': f'Listing mirrors by {ctx.message.author.name}',
-        }
-        resp = requests.post(
-            'https://api.buildkite.com/v2/organizations/lineageos/pipelines/mirror-toggle/builds',
-            json=data,
-            headers={
-                'Authorization': f'Bearer {os.environ.get("BUILDKITE_TOKEN")}'
-            },
+        await self._mirror_toggle(
+            ctx,
+            {'ACTION': 'disable'},
+            f'Listing mirrors by {ctx.message.author.name}',
         )
-        if resp.status_code == 201:
-            await ctx.message.reply(f'started: {resp.json()["web_url"]}')
-        else:
-            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
 
 async def setup(bot):
