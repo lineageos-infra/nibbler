@@ -1,6 +1,6 @@
+import asyncio
 import io
 import json
-import subprocess
 import uuid
 
 import discord
@@ -37,7 +37,7 @@ class CAF(commands.Cog):
             )
 
         for key, value in self._tracked().items():
-            tags = self._get_tags(value['url'])
+            tags = await self._get_tags(value['url'])
             new_tag = next(
                 (x for x in tags if x.startswith(value['prefix'])), None
             )
@@ -62,24 +62,23 @@ class CAF(commands.Cog):
         pass
 
     @staticmethod
-    def _get_tags(url):
-        stdout = subprocess.run(
-            [
-                'timeout',
-                '5',
-                'git',
-                'ls-remote',
-                '--refs',
-                '--tags',
-                url.replace('https://', 'https://:@'),
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        ).stdout.decode()
+    async def _get_tags(url):
+        proc = await asyncio.create_subprocess_exec(
+            'timeout',
+            '5',
+            'git',
+            'ls-remote',
+            '--refs',
+            '--tags',
+            url.replace('https://', 'https://:@'),
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
+        stdout = await proc.stdout.read()
 
         tags = []
 
-        for line in stdout.splitlines():
+        for line in stdout.decode().splitlines():
             _, ref = line.split()
             tags.append(ref[10:])
 
