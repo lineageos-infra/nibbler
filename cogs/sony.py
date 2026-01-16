@@ -118,7 +118,7 @@ class Sony(commands.Cog):
         response = []
 
         for _, value in self._tracked().items():
-            response.append(f'{value["url"]} {value["device"]}')
+            response.append(f'{value["device"]} {value["version"]}')
 
         await ctx.reply(
             file=discord.File(
