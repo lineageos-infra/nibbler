@@ -1,15 +1,16 @@
 import io
 import json
+import re
 import uuid
 
 import discord
 import requests
-from bs4 import BeautifulSoup
 from discord.ext import commands, tasks
 
 
 class Sony(commands.Cog):
-    SONY_URL_PREFIX = 'https://xperirom.com/devices'
+    SONY_API_URL_PREFIX = 'https://xpericheck.com/api/devices'
+    SONY_URL_PREFIX = 'https://xpericheck.com/devices'
 
     def __init__(self, bot):
         self.bot = bot
@@ -38,9 +39,7 @@ class Sony(commands.Cog):
             )
 
         for key, value in self._tracked().items():
-            new_version = self._get_version(
-                value['device'], value['customization']
-            )
+            new_version = self._get_version(value['device'])
 
             if not new_version or value['version'] == new_version:
                 continue
@@ -53,9 +52,6 @@ class Sony(commands.Cog):
                 url=f'{self.SONY_URL_PREFIX}/{value["device"]}',
             )
             embed.add_field(name='Device', value=value['device'], inline=False)
-            embed.add_field(
-                name='Customization', value=value['customization'], inline=False
-            )
             embed.add_field(
                 name='Version', value=value['version'], inline=False
             )
@@ -72,17 +68,16 @@ class Sony(commands.Cog):
         pass
 
     @staticmethod
-    def _get_version(device, customization):
-        content = requests.get(f'{Sony.SONY_URL_PREFIX}/{device}').text
-        soup = BeautifulSoup(content, features='html.parser')
+    def _get_version(device):
+        json = requests.get(f'{Sony.SONY_API_URL_PREFIX}/{device}').json()
+        versions = [x['version'] for x in json['firmwares']]
 
-        for tr in soup.find('tbody').find_all('tr'):
-            td = tr.find_all('td')
-
-            if td[0].text == customization:
-                return td[1].text
-
-        return None
+        return sorted(
+            versions,
+            key=lambda s: [
+                int(p) if p.isdigit() else p for p in re.split(r'(\d+)', s)
+            ],
+        )[-1]
 
     def _tracked(self):
         tracked = {}
@@ -94,14 +89,13 @@ class Sony(commands.Cog):
 
     @sony.command()
     @commands.has_role('sony')
-    async def track(self, ctx, device, customization):
+    async def track(self, ctx, device):
         self.redis.hset(
             'sony-fetch:tracked',
             str(uuid.uuid4()),
             json.dumps(
                 {
                     'device': device,
-                    'customization': customization,
                     'version': None,
                 }
             ),
@@ -111,11 +105,9 @@ class Sony(commands.Cog):
 
     @sony.command()
     @commands.has_role('sony')
-    async def untrack(self, ctx, device, customization=None):
+    async def untrack(self, ctx, device):
         for key, value in self._tracked().items():
             if value['device'] != device:
-                continue
-            if customization and value['customization'] != customization:
                 continue
             self.redis.hdel('sony-fetch:tracked', key)
         await ctx.message.add_reaction('👍')
@@ -126,9 +118,7 @@ class Sony(commands.Cog):
         response = []
 
         for _, value in self._tracked().items():
-            response.append(
-                f'{value["url"]} {value["device"]} {value["customization"]}'
-            )
+            response.append(f'{value["url"]} {value["device"]}')
 
         await ctx.reply(
             file=discord.File(
