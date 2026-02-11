@@ -192,6 +192,34 @@ class Buildkite(commands.Cog):
 
     @commands.has_role('Project Director')
     @buildkite.command(
+        name='kernelpush',
+        help='push upstream kernel branch. example: android_kernel_qcom_sm8750 lineage-22.2 v6.6',
+    )
+    async def kernelpush(self, ctx, repo: str, branch: str, src_branch: str):
+        data = {
+            'branch': 'main',
+            'commit': 'HEAD',
+            'env': {
+                'REPO': repo,
+                'DEST_BRANCH': branch,
+                'SRC_BRANCH': src_branch,
+            },
+            'message': f'kernelpush of {repo} by {ctx.message.author.name}',
+        }
+        resp = requests.post(
+            'https://api.buildkite.com/v2/organizations/lineageos/pipelines/kernelpush/builds',
+            json=data,
+            headers={
+                'Authorization': f'Bearer {os.environ.get("BUILDKITE_TOKEN")}'
+            },
+        )
+        if resp.status_code == 201:
+            await ctx.message.reply(f'started: {resp.json()["web_url"]}')
+        else:
+            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
+    @commands.has_role('Project Director')
+    @buildkite.command(
         name='remove',
         help='remove a build from the mirror. example: remove mako 20230714',
     )
