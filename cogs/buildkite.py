@@ -260,14 +260,14 @@ class Buildkite(commands.Cog):
         name='agent-pause',
         help='pause given agent. example: agent-pause build3 45',
     )
-    async def agent_pause(self, ctx, name: str, timeout_minutes: int):
+    async def agent_pause(self, ctx, name: str, timeout_in_minutes: int):
         agent_id = self._agent_id(name)
         if not agent_id:
             await ctx.message.reply(f'failed: agent id for "{name}" not found')
             return
         data = {
             'note': f'Paused by {ctx.message.author.name}',
-            'timeout_in_minutes': timeout_minutes,
+            'timeout_in_minutes': timeout_in_minutes,
         }
         resp = requests.put(
             f'https://api.buildkite.com/v2/organizations/lineageos/agents/{agent_id}/pause',
