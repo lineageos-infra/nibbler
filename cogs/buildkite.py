@@ -242,6 +242,67 @@ class Buildkite(commands.Cog):
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
+    def _agent_id(self, name: str):
+        resp = requests.get(
+            'https://api.buildkite.com/v2/organizations/lineageos/agents',
+            headers={
+                'Authorization': f'Bearer {os.environ.get("BUILDKITE_TOKEN")}'
+            },
+        )
+        if resp.status_code == 200:
+            for agent in resp.json():
+                if agent['name'] == name:
+                    return agent['id']
+        return None
+
+    @commands.has_role('Project Director')
+    @buildkite.command(
+        name='agent-pause',
+        help='pause given agent. example: agent-pause build3 45',
+    )
+    async def agent_pause(self, ctx, name: str, timeout_minutes: int):
+        agent_id = self._agent_id(name)
+        if not agent_id:
+            await ctx.message.reply(f'failed: agent id for "{name}" not found')
+            return
+        data = {
+            'note': f'Paused by {ctx.message.author.name}',
+            'timeout_in_minutes': timeout_minutes,
+        }
+        resp = requests.put(
+            f'https://api.buildkite.com/v2/organizations/lineageos/agents/{agent_id}/pause',
+            json=data,
+            headers={
+                'Authorization': f'Bearer {os.environ.get("BUILDKITE_TOKEN")}'
+            },
+        )
+        if resp.status_code == 204:
+            await ctx.message.add_reaction('👍')
+        else:
+            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
+    @commands.has_role('Project Director')
+    @buildkite.command(
+        name='agent-resume',
+        help='resume given agent. example: agent-pause build3',
+    )
+    async def agent_resume(self, ctx, name: str):
+        agent_id = self._agent_id(name)
+        if not agent_id:
+            await ctx.message.reply(f'failed: agent id for "{name}" not found')
+            return
+        resp = requests.put(
+            f'https://api.buildkite.com/v2/organizations/lineageos/agents/{agent_id}/resume',
+            json={},
+            headers={
+                'Authorization': f'Bearer {os.environ.get("BUILDKITE_TOKEN")}'
+            },
+        )
+        if resp.status_code == 204:
+            await ctx.message.add_reaction('👍')
+        else:
+            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
     async def _mirror_toggle(self, ctx, env: dict, message: str):
         data = {
             'branch': 'main',
