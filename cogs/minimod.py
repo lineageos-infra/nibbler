@@ -7,6 +7,7 @@ from discord.ext import commands
 
 class MiniMod(commands.Cog):
     ALLOWED_ROLES = [
+        'Maintainer',
         'Moderator',
     ]
     ALLOWED_USERS = [
