@@ -38,6 +38,16 @@ class MiniMod(commands.Cog):
 
     @commands.check(is_allowed)
     @commands.command(hidden=True)
+    async def purge(self, ctx, user: discord.Member, limit: int):
+        if any([x.name not in self.PUBLIC_ROLES for x in user.roles]):
+            await ctx.message.add_reaction('❌')
+            return
+
+        await ctx.channel.purge(limit=limit, check=lambda m: m.author == user)
+        await ctx.message.add_reaction('👍')
+
+    @commands.check(is_allowed)
+    @commands.command(hidden=True)
     async def timeout(self, ctx, user: discord.Member, duration: int):
         if any([x.name not in self.PUBLIC_ROLES for x in user.roles]):
             await ctx.message.add_reaction('❌')
