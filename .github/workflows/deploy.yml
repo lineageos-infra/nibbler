@@ -1,4 +1,4 @@
-name: Deploy to Fly
+name: Deploy to app01
 on:
   push:
     branches:
@@ -10,11 +10,7 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - run: curl -H X-Api-Key:${{ secrets.APP01_API_KEY }} https://app01.lineageos.org/deploy/nibbler/${{ github.sha }}
   notify:
     name: Notify
     runs-on: ubuntu-latest
