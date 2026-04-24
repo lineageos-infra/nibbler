@@ -26,16 +26,19 @@ class MiniMod(commands.Cog):
     async def on_ready(self):
         print(f'Loaded {__name__}')
 
+    @staticmethod
+    def is_allowed(ctx):
+        if any(
+            [x.name in MiniMod.ALLOWED_ROLES for x in ctx.message.author.roles]
+        ):
+            return True
+        if ctx.message.author.id in MiniMod.ALLOWED_USERS:
+            return True
+        return False
+
+    @commands.check(is_allowed)
     @commands.command(hidden=True)
     async def timeout(self, ctx, user: discord.Member, duration):
-        if (
-            not any(
-                [x.name in self.ALLOWED_ROLES for x in ctx.message.author.roles]
-            )
-            and ctx.message.author.id not in self.ALLOWED_USERS
-        ):
-            await ctx.message.add_reaction('❌')
-            return
         if any([x.name not in self.PUBLIC_ROLES for x in user.roles]):
             await ctx.message.add_reaction('❌')
             return
