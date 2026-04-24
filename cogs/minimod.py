@@ -49,7 +49,7 @@ class MiniMod(commands.Cog):
 
     @commands.check(is_allowed)
     @commands.command(hidden=True)
-    async def timeout(self, ctx, user: discord.Member, duration: int):
+    async def timeout(self, ctx, user: discord.Member, duration: str):
         if any([x.name not in self.PUBLIC_ROLES for x in user.roles]):
             await ctx.message.add_reaction('❌')
             return
