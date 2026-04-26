@@ -90,7 +90,7 @@ class Buildkite(commands.Cog):
 
     @commands.has_role('Maintainer')
     @buildkite.command(name='rebuild', help='rebuild 12345')
-    async def rebuild(self, ctx, build_id: str, *args):
+    async def rebuild(self, ctx, build_id: str):
         resp = requests.put(
             f'https://api.buildkite.com/v2/organizations/lineageos/pipelines/android/builds/{build_id}/rebuild',
             headers={
@@ -104,7 +104,7 @@ class Buildkite(commands.Cog):
 
     @commands.has_role('Maintainer')
     @buildkite.command(name='cancel', help='cancel 12345')
-    async def cancel(self, ctx, build_id: str, *args):
+    async def cancel(self, ctx, build_id: str):
         resp = requests.put(
             f'https://api.buildkite.com/v2/organizations/lineageos/pipelines/android/builds/{build_id}/cancel',
             headers={
