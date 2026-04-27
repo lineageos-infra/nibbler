@@ -15,9 +15,9 @@ class MiniMod(commands.Cog):
     ]
     PUBLIC_ROLES = [
         '@everyone',
-        'europe',
         'americas',
         'asia-australia',
+        'europe',
         'offtopic-only',
     ]
 

@@ -31,9 +31,9 @@ class Bot(commands.Bot):
         # is in guild, has author, and has some role besides public ones
         public_roles = [
             '@everyone',
-            'europe',
             'americas',
             'asia-australia',
+            'europe',
             'offtopic-only',
         ]
         return (
