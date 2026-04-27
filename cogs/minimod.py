@@ -18,6 +18,7 @@ class MiniMod(commands.Cog):
         'europe',
         'americas',
         'asia-australia',
+        'offtopic-only',
     ]
 
     def __init__(self, bot):

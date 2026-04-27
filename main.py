@@ -34,6 +34,7 @@ class Bot(commands.Bot):
             'europe',
             'americas',
             'asia-australia',
+            'offtopic-only',
         ]
         return (
             ctx.guild
