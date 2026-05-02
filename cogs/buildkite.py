@@ -117,7 +117,7 @@ class Buildkite(commands.Cog):
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
     @commands.has_role('Project Director')
-    @commands.command(
+    @buildkite.command(
         name='crowdin',
         help='start crowdin build for a branch. example: lineage-20.0',
     )
@@ -158,6 +158,14 @@ class Buildkite(commands.Cog):
             await ctx.message.reply(f'started: {resp.json()["web_url"]}')
         else:
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
+    @commands.has_role('Project Director')
+    @commands.command(
+        name='crowdin',
+        help='start crowdin build for a branch. example: lineage-20.0',
+    )
+    async def _crowdin(self, ctx, version: str):
+        await self.crowdin(ctx, version)
 
     @commands.has_role('Project Director')
     @buildkite.command(
