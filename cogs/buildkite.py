@@ -76,7 +76,7 @@ class Buildkite(commands.Cog):
     @commands.has_role('Project Director')
     @commands.command(
         name='build',
-        help='build android. example: mako lineage-20.0 experimental 123456 234567',
+        help='build android. example: mako,hammerhead lineage-20.0#c856ad1,build1 experimental 123456 234567',
     )
     async def _build(
         self,
