@@ -54,25 +54,30 @@ class MiniMod(commands.Cog):
         if any([x.name not in self.PUBLIC_ROLES for x in user.roles]):
             await ctx.message.add_reaction('❌')
             return
+        reason = f'Timed out by {ctx.message.author.name}'
         utc_now = datetime.datetime.now(datetime.timezone.utc)
         if re.match(r'^\d+s$', duration):
             await user.timeout(
-                utc_now + datetime.timedelta(seconds=int(duration[:-1]))
+                utc_now + datetime.timedelta(seconds=int(duration[:-1])),
+                reason=reason,
             )
             await ctx.message.add_reaction('👍')
         elif re.match(r'^\d+m$', duration):
             await user.timeout(
-                utc_now + datetime.timedelta(minutes=int(duration[:-1]))
+                utc_now + datetime.timedelta(minutes=int(duration[:-1])),
+                reason=reason,
             )
             await ctx.message.add_reaction('👍')
         elif re.match(r'^\d+h$', duration):
             await user.timeout(
-                utc_now + datetime.timedelta(hours=int(duration[:-1]))
+                utc_now + datetime.timedelta(hours=int(duration[:-1])),
+                reason=reason,
             )
             await ctx.message.add_reaction('👍')
         elif re.match(r'^\d+d$', duration):
             await user.timeout(
-                utc_now + datetime.timedelta(days=int(duration[:-1]))
+                utc_now + datetime.timedelta(days=int(duration[:-1])),
+                reason=reason,
             )
             await ctx.message.add_reaction('👍')
         else:
