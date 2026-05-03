@@ -1,5 +1,8 @@
+import asyncio
+import datetime
 import os
 
+import discord
 from discord.ext import commands
 
 
@@ -10,6 +13,18 @@ class Admin(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'Loaded {__name__}')
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member: discord.Member):
+        if self.redis.get('admin.auto_timeout') != b'1':
+            return
+
+        utc_now = datetime.datetime.now(datetime.timezone.utc)
+
+        if member.created_at > utc_now - datetime.timedelta(days=1):
+            print('Timing out fresh account:', member.name)
+            await asyncio.sleep(60 * 8)
+            await member.timeout(utc_now + datetime.timedelta(days=7))
 
     @commands.command(name='reload', hidden=True)
     @commands.is_owner()
