@@ -65,6 +65,11 @@ class MiniMod(commands.Cog):
                 utc_now + datetime.timedelta(minutes=int(duration[:-1]))
             )
             await ctx.message.add_reaction('👍')
+        elif re.match(r'^\d+h$', duration):
+            await user.timeout(
+                utc_now + datetime.timedelta(hours=int(duration[:-1]))
+            )
+            await ctx.message.add_reaction('👍')
         elif re.match(r'^\d+d$', duration):
             await user.timeout(
                 utc_now + datetime.timedelta(days=int(duration[:-1]))
