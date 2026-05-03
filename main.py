@@ -1,3 +1,5 @@
+import asyncio
+import datetime
 import os
 import subprocess
 from glob import glob
@@ -69,6 +71,16 @@ async def on_command_error(ctx, error):
         await ctx.message.reply('No.')
     else:
         await ctx.message.reply(f'error: {error}')
+
+
+@bot.event
+async def on_member_join(member):
+    utc_now = datetime.datetime.now(datetime.timezone.utc)
+
+    if member.created_at > utc_now - datetime.timedelta(days=1):
+        print('Timing out fresh account:', member.name)
+        await asyncio.sleep(60 * 8)
+        await member.timeout(utc_now + datetime.timedelta(days=7))
 
 
 @bot.check
