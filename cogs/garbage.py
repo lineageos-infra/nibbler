@@ -32,6 +32,7 @@ class Garbage(commands.Cog):
         'snet': 'https://wiki.lineageos.org/quirks/snet/',
         'shipit': 'https://memegenerator.net/img/instances/54219302/lgtm-ship-it.jpg',
         'stable': 'A stable is where horses are kept. Lineage automatic builds are done on a !weekly basis',
+        'twrp': "Unless specifically said so in your device's installation instructions, do NOT use TWRP. It is based on outdated Android versions and it may break your installation (i.e by installing its own application, or breaking userdata with improper decryption). Use LineageOS Recovery.",
         'unofficial': 'This channel is for help with official roms obtained from https://download.lineageos.org/. Unofficial roms are not made by LineageOS, thus can be very different. Please seek support for unofficial roms from where you got it.',
         'watcannon': 'https://64.media.tumblr.com/d655daf4856de7e1a45d4a180ad3d5ea/tumblr_muv69e0RvZ1shlw0so1_500.gif',
         'weekly': 'LineageOS is built on a weekly basis (not nightly). The nightly version string is historical. <https://github.com/LineageOS/hudson/blob/main/lineage-build-targets>',
