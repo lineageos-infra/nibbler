@@ -83,6 +83,17 @@ class MiniMod(commands.Cog):
         else:
             await ctx.message.add_reaction('❌')
 
+    @commands.check(is_allowed)
+    @commands.command(hidden=True)
+    async def untimeout(self, ctx, user: discord.Member):
+        if any([x.name not in self.PUBLIC_ROLES for x in user.roles]):
+            await ctx.message.add_reaction('❌')
+            return
+        await user.timeout(
+            None, reason=f'Timeout removed by {ctx.message.author.name}'
+        )
+        await ctx.message.add_reaction('👍')
+
 
 async def setup(bot):
     await bot.add_cog(MiniMod(bot))
