@@ -11,6 +11,7 @@ class MiniMod(commands.Cog):
         'Moderator',
     ]
     ALLOWED_USERS = [
+        453576904226635787,
         717034948036526180,
     ]
     PUBLIC_ROLES = [
