@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 import re
 
@@ -21,6 +23,7 @@ class MiniMod(commands.Cog):
         'europe',
         'offtopic-only',
     ]
+    BRIDGE_WEBHOOK_ID = 897609600403116092
 
     def __init__(self, bot):
         self.bot = bot
@@ -41,12 +44,23 @@ class MiniMod(commands.Cog):
 
     @commands.check(is_allowed)
     @commands.command(hidden=True)
-    async def purge(self, ctx, user: discord.Member, limit: int):
-        if any([x.name not in self.PUBLIC_ROLES for x in user.roles]):
+    async def purge(self, ctx, user: discord.Member | str, limit: int):
+        if isinstance(user, discord.User) and any(
+            [x.name not in self.PUBLIC_ROLES for x in user.roles]
+        ):
             await ctx.message.add_reaction('❌')
             return
 
-        await ctx.channel.purge(limit=limit, check=lambda m: m.author == user)
+        if user == f'<@{self.BRIDGE_WEBHOOK_ID}>':
+            await ctx.channel.purge(
+                limit=limit,
+                check=lambda m: m.webhook_id == self.BRIDGE_WEBHOOK_ID,
+            )
+        else:
+            await ctx.channel.purge(
+                limit=limit,
+                check=lambda m: m.author == user,
+            )
         await ctx.message.add_reaction('👍')
 
     @commands.check(is_allowed)
