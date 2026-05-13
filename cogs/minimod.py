@@ -44,8 +44,10 @@ class MiniMod(commands.Cog):
 
     @commands.check(is_allowed)
     @commands.command(hidden=True)
-    async def purge(self, ctx, user: discord.User | str, limit: int):
-        if isinstance(user, discord.User) and any(
+    async def purge(
+        self, ctx, user: discord.Member | discord.User | str, limit: int
+    ):
+        if isinstance(user, discord.Member) and any(
             [x.name not in self.PUBLIC_ROLES for x in user.roles]
         ):
             await ctx.message.add_reaction('❌')
