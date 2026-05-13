@@ -103,6 +103,11 @@ class Buildkite(commands.Cog):
             await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
 
     @commands.has_role('Maintainer')
+    @commands.command(name='rebuild', help='rebuild 12345')
+    async def _rebuild(self, ctx, build_id: str):
+        await self.rebuild(ctx, build_id)
+
+    @commands.has_role('Maintainer')
     @buildkite.command(name='cancel', help='cancel 12345')
     async def cancel(self, ctx, build_id: str):
         resp = requests.put(
