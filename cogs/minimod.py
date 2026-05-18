@@ -23,7 +23,7 @@ class MiniMod(commands.Cog):
         'europe',
         'offtopic-only',
     ]
-    BRIDGE_WEBHOOK_ID = 897609600403116092
+    BRIDGE_WEBHOOK_ID = 896248182802112582
 
     def __init__(self, bot):
         self.bot = bot
