@@ -22,6 +22,32 @@ class Buildkite(commands.Cog):
 
     @commands.has_role('Project Director')
     @buildkite.command(
+        name='add-maintainer',
+        help='invite maintainer to GitHub',
+    )
+    async def add_maintainers(self, ctx, username: str):
+        data = {
+            'branch': 'main',
+            'commit': 'HEAD',
+            'env': {
+                'GITHUB_USERNAME': username,
+            },
+            'message': f'Invite {username} by {ctx.message.author.name}',
+        }
+        resp = requests.post(
+            'https://api.buildkite.com/v2/organizations/lineageos/pipelines/add-maintainer/builds',
+            json=data,
+            headers={
+                'Authorization': f'Bearer {os.environ.get("BUILDKITE_TOKEN")}'
+            },
+        )
+        if resp.status_code == 201:
+            await ctx.message.reply(f'started: {resp.json()["web_url"]}')
+        else:
+            await ctx.message.reply(f'failed: ```{resp.text[:1500]}```')
+
+    @commands.has_role('Project Director')
+    @buildkite.command(
         name='build',
         help='build android. example: mako,hammerhead lineage-20.0#c856ad1,build1 experimental 123456 234567',
     )
