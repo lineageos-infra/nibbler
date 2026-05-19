@@ -53,9 +53,9 @@ class MiniMod(commands.Cog):
         messages = []
 
         async for message in ctx.channel.history(limit=200):
-            if (
-                message.author == user
-                or message.webhook_id in self.BRIDGE_WEBHOOK_IDS
+            if message.author == user or (
+                user == f'<@{message.webhook_id}>'
+                and message.webhook_id in self.BRIDGE_WEBHOOK_IDS
             ):
                 messages.append(message)
 
