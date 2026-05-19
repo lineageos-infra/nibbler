@@ -23,7 +23,11 @@ class MiniMod(commands.Cog):
         'europe',
         'offtopic-only',
     ]
-    BRIDGE_WEBHOOK_ID = 896248182802112582
+    BRIDGE_WEBHOOK_IDS = [
+        896248182802112582,
+        896334981767524404,
+        897609600403116092,
+    ]
 
     def __init__(self, bot):
         self.bot = bot
@@ -42,27 +46,25 @@ class MiniMod(commands.Cog):
             return True
         return False
 
-    @commands.check(is_allowed)
     @commands.command(hidden=True)
     async def purge(
         self, ctx, user: discord.Member | discord.User | str, limit: int
     ):
-        if isinstance(user, discord.Member) and any(
-            [x.name not in self.PUBLIC_ROLES for x in user.roles]
-        ):
-            await ctx.message.add_reaction('❌')
-            return
+        messages = []
 
-        if user == f'<@{self.BRIDGE_WEBHOOK_ID}>':
-            await ctx.channel.purge(
-                limit=limit,
-                check=lambda m: m.webhook_id == self.BRIDGE_WEBHOOK_ID,
-            )
-        else:
-            await ctx.channel.purge(
-                limit=limit,
-                check=lambda m: m.author == user,
-            )
+        async for message in ctx.channel.history(limit=200):
+            if (
+                message.author == user
+                or message.webhook_id in self.BRIDGE_WEBHOOK_IDS
+            ):
+                messages.append(message)
+
+            if len(messages) == limit:
+                break
+
+        await ctx.channel.delete_messages(
+            messages, reason=f'Removed by {ctx.message.author.name}'
+        )
         await ctx.message.add_reaction('👍')
 
     @commands.check(is_allowed)
