@@ -113,6 +113,26 @@ class MiniMod(commands.Cog):
         )
         await ctx.message.add_reaction('👍')
 
+    @commands.check(is_allowed)
+    @commands.command(hidden=True)
+    async def offtopic(self, ctx, user: discord.Member, action: str = 'add'):
+        role = discord.utils.get(ctx.guild.roles, name='offtopic-only')
+        if role is None:
+            await ctx.message.add_reaction('❌')
+            return
+        if action == 'remove':
+            await user.remove_roles(
+                role, reason=f'Removed by {ctx.message.author.name}'
+            )
+        elif action == 'add':
+            await user.add_roles(
+                role, reason=f'Added by {ctx.message.author.name}'
+            )
+        else:
+            await ctx.message.add_reaction('❌')
+            return
+        await ctx.message.add_reaction('👍')
+
 
 async def setup(bot):
     await bot.add_cog(MiniMod(bot))
