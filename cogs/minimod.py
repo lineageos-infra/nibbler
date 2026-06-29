@@ -16,6 +16,9 @@ class MiniMod(commands.Cog):
         453576904226635787,
         717034948036526180,
     ]
+    DISALLOWED_USERS = [
+        438758875093532673,
+    ]
     PUBLIC_ROLES = [
         '@everyone',
         'americas',
@@ -42,6 +45,8 @@ class MiniMod(commands.Cog):
             [x.name in MiniMod.ALLOWED_ROLES for x in ctx.message.author.roles]
         ):
             return True
+        if ctx.message.author.id in MiniMod.DISALLOWED_USERS:
+            return False
         if ctx.message.author.id in MiniMod.ALLOWED_USERS:
             return True
         return False
