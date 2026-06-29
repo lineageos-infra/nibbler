@@ -41,12 +41,12 @@ class MiniMod(commands.Cog):
 
     @staticmethod
     def is_allowed(ctx):
+        if ctx.message.author.id in MiniMod.DISALLOWED_USERS:
+            return False
         if any(
             [x.name in MiniMod.ALLOWED_ROLES for x in ctx.message.author.roles]
         ):
             return True
-        if ctx.message.author.id in MiniMod.DISALLOWED_USERS:
-            return False
         if ctx.message.author.id in MiniMod.ALLOWED_USERS:
             return True
         return False
