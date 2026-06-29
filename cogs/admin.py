@@ -26,6 +26,37 @@ class Admin(commands.Cog):
             await asyncio.sleep(60 * 8)
             await member.timeout(utc_now + datetime.timedelta(days=7))
 
+    @commands.Cog.listener()
+    async def on_message(self, message: discord.Message):
+        # We only care about #human-spam here
+        if message.channel.id != 1141822511902900446:
+            return
+
+        print('Nuking potential spammer:', message.author.name)
+
+        # Timeout for 7 days
+        utc_now = datetime.datetime.now(datetime.timezone.utc)
+        await message.author.timeout(utc_now + datetime.timedelta(days=7))
+
+        # Delete last 10 minutes of their messages
+        cutoff = utc_now - datetime.timedelta(minutes=10)
+
+        for channel in message.guild.text_channels:
+            if channel.category_id not in [
+                628008281121751070,  # Public (Linked to IRC)
+                1141822171992309901,  # Public (Discord only)
+            ]:
+                continue
+
+            try:
+                await channel.purge(
+                    check=lambda m: m.author == message.author,
+                    after=cutoff,
+                    bulk=True,
+                )
+            except Exception as e:
+                print('Purge failed', e)
+
     @commands.command(name='reload', hidden=True)
     @commands.is_owner()
     async def reload(self, ctx):
