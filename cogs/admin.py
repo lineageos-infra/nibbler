@@ -24,7 +24,9 @@ class Admin(commands.Cog):
         if member.created_at > utc_now - datetime.timedelta(days=1):
             print('Timing out fresh account:', member.name)
             await asyncio.sleep(60 * 8)
-            await member.timeout(utc_now + datetime.timedelta(days=7))
+            await member.timeout(
+                utc_now + datetime.timedelta(days=7), reason='Fresh account'
+            )
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
@@ -36,7 +38,9 @@ class Admin(commands.Cog):
 
         # Timeout for 7 days
         utc_now = datetime.datetime.now(datetime.timezone.utc)
-        await message.author.timeout(utc_now + datetime.timedelta(days=7))
+        await message.author.timeout(
+            utc_now + datetime.timedelta(days=7), reason='Posted in #human-spam'
+        )
 
         # Delete last 10 minutes of their messages
         cutoff = utc_now - datetime.timedelta(minutes=10)
@@ -53,6 +57,7 @@ class Admin(commands.Cog):
                     check=lambda m: m.author == message.author,
                     after=cutoff,
                     bulk=True,
+                    reason='Posted in #human-spam',
                 )
             except Exception as e:
                 print('Purge failed', e)
