@@ -51,6 +51,7 @@ class MiniMod(commands.Cog):
             return True
         return False
 
+    @commands.check(is_allowed)
     @commands.command(hidden=True)
     async def purge(
         self, ctx, user: discord.Member | discord.User | str, limit: int
