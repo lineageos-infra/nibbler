@@ -8,7 +8,7 @@ from discord.ext import commands, tasks
 
 
 class CAF(commands.Cog):
-    CLO_URL_PREFIX = 'https://git.codelinaro.org/clo/la'
+    CLO_URL_PREFIX = 'https://git.codelinaro.org/clo/l'
 
     def __init__(self, bot):
         self.bot = bot
