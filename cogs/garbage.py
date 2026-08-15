@@ -128,7 +128,7 @@ class Garbage(commands.Cog):
             params=params,
             timeout=5,
         ).json()
-        await ctx.send(req['total'])
+        await ctx.reply(req['total'])
 
 
 async def setup(bot):
