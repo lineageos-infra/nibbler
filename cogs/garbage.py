@@ -114,14 +114,14 @@ class Garbage(commands.Cog):
 
     @commands.command(hidden=True)
     async def installs(self, ctx, device, version=None, build_date=None):
-        params = {}
+        params = {
+            'model': device,
+        }
 
         if version and build_date:
             params['version_raw'] = f'{version}-{build_date}-NIGHTLY-{device}'
         elif version:
             params['version'] = version
-        else:
-            params['device'] = device
 
         req = requests.get(
             'https://stats.lineageos.org/api/v1/stats/filter',
