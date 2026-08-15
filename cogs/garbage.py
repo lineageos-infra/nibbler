@@ -112,6 +112,17 @@ class Garbage(commands.Cog):
         if reply := '\n'.join(reply):
             await ctx.reply(reply)
 
+    @commands.command(hidden=True)
+    async def installs(self, ctx, device, version, build_date):
+        req = requests.get(
+            'https://stats.lineageos.org/api/v1/stats/filter',
+            params={
+                'version_raw': f'{version}-{build_date}-NIGHTLY-{device}',
+            },
+            timeout=5,
+        ).json()
+        await ctx.send(req['total'])
+
 
 async def setup(bot):
     await bot.add_cog(Garbage(bot))
