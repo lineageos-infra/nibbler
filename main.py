@@ -50,11 +50,13 @@ class Bot(commands.Bot):
         for cog in self.cogs:
             self.get_cog(cog).redis = self.get_cog('Redis').redis
 
+intents = discord.Intents.all()
+intents.presences = False
 
 bot = Bot(
     command_prefix='!',
     allowed_mentions=discord.AllowedMentions.none(),
-    intents=discord.Intents.all(),
+    intents=intents,
 )
 
 
